@@ -23,6 +23,7 @@ struct KeybooApp: App {
                 .onChange(of: settings.selectedProfile) { _, newValue in
                     SoundEngine.shared.reloadProfile(newValue)
                     TypingVisualizer.shared.updateAccentColor(newValue.swatchColor)
+                    SoundEngine.shared.playPreview()
                 }
                 .onChange(of: settings.enableVisualizer) { _, _ in
                     syncVisualizer()

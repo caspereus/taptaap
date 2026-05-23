@@ -71,6 +71,22 @@ final class SoundEngine {
         #endif
     }
 
+    /// Plays a short preview of the active profile's normal key sound.
+    /// Safe to call from the menu UI without Input Monitoring permission.
+    func playPreview() {
+        lock.lock()
+        guard let pools = samplePools[.normal], let pool = pools.first else {
+            lock.unlock()
+            return
+        }
+
+        let playerNode = pool.playerNodes[0]
+        let buffer = pool.buffer
+        lock.unlock()
+
+        schedulePlayback(on: playerNode, buffer: buffer, position: Self.previewPosition)
+    }
+
     /// Called directly from the CGEventTap callback for minimum latency.
     func play(keyCode: CGKeyCode) {
         let category = KeyCodeMapper.category(for: keyCode)
@@ -90,6 +106,16 @@ final class SoundEngine {
         let buffer = pool.buffer
         lock.unlock()
 
+        schedulePlayback(on: playerNode, buffer: buffer, position: position)
+    }
+
+    private static let previewPosition = AVAudio3DPoint(x: 0, y: 0, z: -0.35)
+
+    private func schedulePlayback(
+        on playerNode: AVAudioPlayerNode,
+        buffer: AVAudioPCMBuffer,
+        position: AVAudio3DPoint
+    ) {
         ensureEngineRunning()
 
         playerNode.position = position

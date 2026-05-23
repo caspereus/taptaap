@@ -27,7 +27,7 @@ struct MenuBarView: View {
                 switchPicker
             } label: {
                 Label {
-                    Text("Switch")
+                    Text(settings.selectedProfile.switchName)
                 } icon: {
                     Image(nsImage: SwitchSwatchImage.image(for: settings.selectedProfile))
                 }
