@@ -15,6 +15,7 @@ final class SoundEngine {
 
     private let engine = AVAudioEngine()
     private let environmentNode = AVAudioEnvironmentNode()
+    private let mixerNode = AVAudioMixerNode()
 
     private var profile: SoundProfile = SoundProfile.standard(for: .default)
     private var samplePools: [KeyCategory: [SamplePool]] = [:]
@@ -69,6 +70,12 @@ final class SoundEngine {
             print("[Keyboo] No sound files found for profile '\(profileID.rawValue)'. Add .wav files under Resources/Sounds/\(profileID.rawValue)/")
         }
         #endif
+    }
+
+    func setOutputVolume(_ volume: Float) {
+        lock.lock()
+        mixerNode.outputVolume = max(0, min(volume, 1))
+        lock.unlock()
     }
 
     /// Plays a short preview of the active profile's normal key sound.
@@ -128,7 +135,9 @@ final class SoundEngine {
 
     private func setupEngine() {
         engine.attach(environmentNode)
-        engine.connect(environmentNode, to: engine.outputNode, format: nil)
+        engine.attach(mixerNode)
+        engine.connect(environmentNode, to: mixerNode, format: nil)
+        engine.connect(mixerNode, to: engine.outputNode, format: nil)
 
         environmentNode.listenerPosition = AVAudio3DPoint(x: 0, y: 0, z: 0)
         environmentNode.listenerAngularOrientation = AVAudio3DAngularOrientation(yaw: 0, pitch: 0, roll: 0)

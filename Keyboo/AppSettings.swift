@@ -28,6 +28,7 @@ final class AppSettings: ObservableObject {
         static let enableVisualizer = "keyboo.enableVisualizer"
         static let menuBarPosition = "keyboo.menuBarPosition"
         static let hasCompletedPermissionOnboarding = "keyboo.hasCompletedPermissionOnboarding"
+        static let outputVolume = "keyboo.outputVolume"
     }
 
     @Published var isEnabled: Bool {
@@ -38,9 +39,12 @@ final class AppSettings: ObservableObject {
         didSet { UserDefaults.standard.set(selectedProfile.rawValue, forKey: Keys.selectedProfile) }
     }
 
-    /// Placeholder for a future Launch-at-Login implementation.
     @Published var launchAtLogin: Bool {
         didSet { UserDefaults.standard.set(launchAtLogin, forKey: Keys.launchAtLogin) }
+    }
+
+    @Published var outputVolume: Double {
+        didSet { UserDefaults.standard.set(outputVolume, forKey: Keys.outputVolume) }
     }
 
     @Published var enableVisualizer: Bool {
@@ -62,6 +66,7 @@ final class AppSettings: ObservableObject {
             rawValue: defaults.string(forKey: Keys.selectedProfile) ?? SoundProfileID.default.rawValue
         ) ?? .default
         launchAtLogin = defaults.object(forKey: Keys.launchAtLogin) as? Bool ?? false
+        outputVolume = defaults.object(forKey: Keys.outputVolume) as? Double ?? 1.0
         enableVisualizer = defaults.object(forKey: Keys.enableVisualizer) as? Bool ?? false
         menuBarPosition = MenuBarPosition(
             rawValue: defaults.string(forKey: Keys.menuBarPosition) ?? MenuBarPosition.center.rawValue

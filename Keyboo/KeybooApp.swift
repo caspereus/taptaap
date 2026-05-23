@@ -25,6 +25,9 @@ struct KeybooApp: App {
                     TypingVisualizer.shared.updateAccentColor(newValue.swatchColor)
                     SoundEngine.shared.playPreview()
                 }
+                .onChange(of: settings.outputVolume) { _, newValue in
+                    SoundEngine.shared.setOutputVolume(Float(newValue))
+                }
                 .onChange(of: settings.enableVisualizer) { _, _ in
                     syncVisualizer()
                 }
@@ -54,6 +57,7 @@ struct KeybooApp: App {
 
     private func syncServices() {
         permissions.refreshAccessStatus()
+        SoundEngine.shared.setOutputVolume(Float(settings.outputVolume))
         SoundEngine.shared.reloadProfile(settings.selectedProfile)
         syncKeyboardMonitor()
         syncVisualizer()
