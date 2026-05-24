@@ -23,5 +23,5 @@ enum InstallLocation {
     }
 
     static let installHint =
-        "Keeping Keyboo in Applications makes Input Monitoring setup more predictable."
+        "Keeping Taptaap in Applications makes Input Monitoring setup more predictable."
 }

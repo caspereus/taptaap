@@ -1,3 +1,4 @@
+import AppKit
 import CoreGraphics
 import Foundation
 
@@ -70,9 +71,11 @@ final class KeyboardEventMonitor {
     }
 
     private func runEventTap(on thread: Thread) {
-        let mask = CGEventMask(1 << CGEventType.keyDown.rawValue)
+        let keyDownMask = 1 << CGEventType.keyDown.rawValue
+        let keyUpMask = 1 << CGEventType.keyUp.rawValue
+        let mask = CGEventMask(keyDownMask | keyUpMask)
         let callback: CGEventTapCallBack = { _, type, event, userInfo in
-            guard type == .keyDown, let userInfo else {
+            guard let userInfo else {
                 return Unmanaged.passUnretained(event)
             }
 
@@ -81,13 +84,26 @@ final class KeyboardEventMonitor {
                 return Unmanaged.passUnretained(event)
             }
 
-            // Privacy: only the virtual key code is read — never typed text.
+            // Privacy: only the virtual key code and modifier flags are read — never typed text.
             let keyCode = CGKeyCode(event.getIntegerValueField(.keyboardEventKeycode))
-            SoundEngine.shared.play(keyCode: keyCode)
+            let modifierFlags = NSEvent.ModifierFlags(rawValue: UInt(event.flags.rawValue))
 
-            DispatchQueue.main.async {
-                Task { @MainActor in
-                    TypingVisualizer.shared.recordKeystroke(keyCode: keyCode)
+            if type == .keyDown {
+                SoundEngine.shared.play(keyCode: keyCode)
+
+                DispatchQueue.main.async {
+                    Task { @MainActor in
+                        TypingVisualizer.shared.recordKeyDown(
+                            keyCode: keyCode,
+                            modifierFlags: modifierFlags
+                        )
+                    }
+                }
+            } else if type == .keyUp {
+                DispatchQueue.main.async {
+                    Task { @MainActor in
+                        TypingVisualizer.shared.recordKeyUp(keyCode: keyCode)
+                    }
                 }
             }
 

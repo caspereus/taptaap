@@ -7,16 +7,16 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		CED40E012FC065830074DB45 /* Keyboo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Keyboo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CED40E012FC065830074DB45 /* Taptaap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Taptaap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		CED40E042FC065830074DB45 /* Exceptions for "Keyboo" folder in "Keyboo" target */ = {
+		CED40E042FC065830074DB45 /* Exceptions for "Keyboo" folder in "Taptaap" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
-			target = CED40E002FC065830074DB45 /* Keyboo */;
+			target = CED40E002FC065830074DB45 /* Taptaap */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -24,7 +24,7 @@
 		CED40E032FC065830074DB45 /* Keyboo */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				CED40E042FC065830074DB45 /* Exceptions for "Keyboo" folder in "Keyboo" target */,
+				CED40E042FC065830074DB45 /* Exceptions for "Keyboo" folder in "Taptaap" target */,
 			);
 			path = Keyboo;
 			sourceTree = "<group>";
@@ -53,7 +53,7 @@
 		CED40E022FC065830074DB45 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				CED40E012FC065830074DB45 /* Keyboo.app */,
+				CED40E012FC065830074DB45 /* Taptaap.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -61,9 +61,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		CED40E002FC065830074DB45 /* Keyboo */ = {
+		CED40E002FC065830074DB45 /* Taptaap */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = CED40E0C2FC065840074DB45 /* Build configuration list for PBXNativeTarget "Keyboo" */;
+			buildConfigurationList = CED40E0C2FC065840074DB45 /* Build configuration list for PBXNativeTarget "Taptaap" */;
 			buildPhases = (
 				CED40DFD2FC065830074DB45 /* Sources */,
 				CED40DFE2FC065830074DB45 /* Frameworks */,
@@ -76,11 +76,11 @@
 			fileSystemSynchronizedGroups = (
 				CED40E032FC065830074DB45 /* Keyboo */,
 			);
-			name = Keyboo;
+			name = Taptaap;
 			packageProductDependencies = (
 			);
-			productName = Keyboo;
-			productReference = CED40E012FC065830074DB45 /* Keyboo.app */;
+			productName = Taptaap;
+			productReference = CED40E012FC065830074DB45 /* Taptaap.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -112,7 +112,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				CED40E002FC065830074DB45 /* Keyboo */,
+				CED40E002FC065830074DB45 /* Taptaap */,
 			);
 		};
 /* End PBXProject section */
@@ -268,6 +268,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Keyboo/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Taptaap;
 				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -298,6 +299,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Keyboo/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Taptaap;
 				INFOPLIST_KEY_LSUIElement = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -328,7 +330,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		CED40E0C2FC065840074DB45 /* Build configuration list for PBXNativeTarget "Keyboo" */ = {
+		CED40E0C2FC065840074DB45 /* Build configuration list for PBXNativeTarget "Taptaap" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				CED40E0D2FC065840074DB45 /* Debug */,

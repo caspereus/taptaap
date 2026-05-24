@@ -34,7 +34,7 @@ struct PermissionOnboardingView: View {
                 .foregroundStyle(.tint)
                 .symbolRenderingMode(.hierarchical)
 
-            Text("Welcome to Keyboo")
+            Text("Welcome to Taptaap")
                 .font(.title2.weight(.semibold))
 
             Text("Mechanical keyboard sounds for every key you press.")
@@ -55,7 +55,7 @@ struct PermissionOnboardingView: View {
                 Label("Your privacy", systemImage: "lock.shield")
                     .font(.headline)
 
-                Text("Keyboo only reads virtual key codes to play sounds. It never captures, stores, or transmits what you type.")
+                Text("Taptaap only reads virtual key codes to play sounds. It never captures, stores, or transmits what you type.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -65,7 +65,7 @@ struct PermissionOnboardingView: View {
     }
 
     private var permissionCard: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        GlassCard {
             HStack {
                 Label("Input Monitoring", systemImage: "hand.tap")
                     .font(.headline)
@@ -75,7 +75,7 @@ struct PermissionOnboardingView: View {
                 statusBadge
             }
 
-            Text("Keyboo needs this permission to detect key presses system-wide and play switch sounds.")
+            Text("Taptaap needs this permission to detect key presses system-wide and play switch sounds.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
@@ -83,7 +83,7 @@ struct PermissionOnboardingView: View {
             if !permissions.hasInputMonitoringAccess {
                 VStack(alignment: .leading, spacing: 6) {
                     if permissions.hasAccessibilityOnly {
-                        Text("Accessibility is enabled, but Keyboo needs Input Monitoring — a separate permission.")
+                        Text("Accessibility is enabled, but Taptaap needs Input Monitoring — a separate permission.")
                             .font(.caption)
                             .foregroundStyle(.orange)
                             .fixedSize(horizontal: false, vertical: true)
@@ -92,14 +92,12 @@ struct PermissionOnboardingView: View {
                     PermissionXcodeDevNote()
 
                     onboardingStep(number: 1, text: "Click \"Open System Settings\" below")
-                    onboardingStep(number: 2, text: "Enable Keyboo under Privacy & Security → Input Monitoring")
-                    onboardingStep(number: 3, text: "Return here — Keyboo will start automatically")
+                    onboardingStep(number: 2, text: "Enable Taptaap under Privacy & Security → Input Monitoring")
+                    onboardingStep(number: 3, text: "Return here — Taptaap will start automatically")
                 }
                 .padding(.top, 4)
             }
         }
-        .padding(16)
-        .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 10))
     }
 
     @ViewBuilder
@@ -138,6 +136,7 @@ struct PermissionOnboardingView: View {
             Button("Skip for Now") {
                 completeOnboarding()
             }
+            .buttonStyle(.glass)
             .keyboardShortcut(.cancelAction)
 
             Spacer()
@@ -147,14 +146,15 @@ struct PermissionOnboardingView: View {
                     completeOnboarding()
                 }
                 .keyboardShortcut(.defaultAction)
-                .buttonStyle(.borderedProminent)
+                .buttonStyle(.glassProminent)
             } else {
                 Button("Open System Settings") {
                     permissions.requestAccess()
                     permissions.openInputMonitoringSettings()
                 }
                 .keyboardShortcut(.defaultAction)
-                .buttonStyle(.borderedProminent)
+                .buttonStyle(.glassProminent)
+                .tint(.accentColor)
             }
         }
         .padding(20)

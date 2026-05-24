@@ -1,4 +1,5 @@
 import AppKit
+import Carbon
 import Combine
 import CoreGraphics
 import SwiftUI
@@ -6,97 +7,152 @@ import SwiftUI
 @MainActor
 final class TypingVisualizer: ObservableObject {
     static let shared = TypingVisualizer()
-    static let panelSize = NSSize(width: 260, height: 52)
 
-    @Published private(set) var currentWPM: Int = 0
-    @Published private(set) var currentKPM: Int = 0
-    @Published private(set) var accentColor: Color = SoundProfileID.default.swatchColor
+    private static let horizontalPadding: CGFloat = 28
+    private static let verticalPadding: CGFloat = 36
+    private static let textRowHeight: CGFloat = 24
+
+    static var panelSize: NSSize {
+        let keyboard = KeyboardLayout.contentSize
+        return NSSize(
+            width: keyboard.width + horizontalPadding,
+            height: keyboard.height + verticalPadding + textRowHeight
+        )
+    }
+
+    @Published private(set) var pressedKeyCodes: Set<CGKeyCode> = []
+    @Published private(set) var recentText: String = ""
+    @Published private(set) var theme: VisualizerTheme = .arctic
 
     private var panel: NSPanel?
-    private var position: MenuBarPosition = .center
+    private var position: VisualizerPosition = .bottomCenter
     private var isVisible = false
-    private var keystrokeTimestamps: [Date] = []
-    private var idleTimer: Timer?
+    private var keyReleaseTimers: [CGKeyCode: Timer] = [:]
+    private var cursorTrackingTimer: Timer?
 
-    private let windowDuration: TimeInterval = 10
-    private let minimumElapsed: TimeInterval = 0.5
+    private let edgeMargin: CGFloat = 24
+    private let bottomMargin: CGFloat = 72
+    private let topMargin: CGFloat = 12
+    private let cursorOffset: CGFloat = 20
+    private let maxRecentCharacters = 48
+    private let keyReleaseFallback: TimeInterval = 0.12
 
     private init() {}
 
-    func setActive(_ active: Bool, position: MenuBarPosition, accentColor: Color) {
+    func setActive(_ active: Bool, position: VisualizerPosition, theme: VisualizerTheme) {
         self.position = position
-        self.accentColor = accentColor
+        self.theme = theme
         isVisible = active
 
         if active {
             showPanel()
-            startIdleTimer()
+            syncCursorTracking()
         } else {
             hidePanel()
-            resetSpeedTracking()
+            resetState()
         }
     }
 
-    func updatePosition(_ position: MenuBarPosition) {
+    func updatePosition(_ position: VisualizerPosition) {
         self.position = position
+        syncCursorTracking()
         repositionPanel()
     }
 
-    func updateAccentColor(_ color: Color) {
-        accentColor = color
+    func updateTheme(_ theme: VisualizerTheme) {
+        self.theme = theme
     }
 
-    func recordKeystroke(keyCode: CGKeyCode) {
-        guard isVisible, KeyCodeMapper.countsTowardTypingSpeed(for: keyCode) else { return }
+    func recordKeyDown(keyCode: CGKeyCode, modifierFlags: NSEvent.ModifierFlags) {
+        guard isVisible else { return }
 
-        let now = Date()
-        keystrokeTimestamps.append(now)
-        pruneSamples(before: now)
-        recomputeSpeed(at: now)
-        startIdleTimer()
-    }
+        pressedKeyCodes.insert(keyCode)
+        scheduleKeyRelease(for: keyCode)
+        appendTypedCharacter(keyCode: keyCode, modifierFlags: modifierFlags)
 
-    private func resetSpeedTracking() {
-        stopIdleTimer()
-        keystrokeTimestamps.removeAll()
-        currentWPM = 0
-        currentKPM = 0
-    }
-
-    private func pruneSamples(before now: Date) {
-        let cutoff = now.addingTimeInterval(-windowDuration)
-        keystrokeTimestamps.removeAll { $0 < cutoff }
-    }
-
-    private func recomputeSpeed(at now: Date) {
-        guard !keystrokeTimestamps.isEmpty else {
-            currentWPM = 0
-            currentKPM = 0
-            return
+        if position.isFollowCursor {
+            repositionPanel()
         }
-
-        let oldest = keystrokeTimestamps[0]
-        let elapsed = max(now.timeIntervalSince(oldest), minimumElapsed)
-        let kpm = Double(keystrokeTimestamps.count) / elapsed * 60.0
-        currentKPM = Int(kpm.rounded())
-        currentWPM = Int((kpm / 5.0).rounded())
     }
 
-    private func startIdleTimer() {
-        stopIdleTimer()
-        idleTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
-            Task { @MainActor in
-                guard let self, self.isVisible else { return }
-                let now = Date()
-                self.pruneSamples(before: now)
-                self.recomputeSpeed(at: now)
+    func recordKeyUp(keyCode: CGKeyCode) {
+        guard isVisible else { return }
+        releaseKey(keyCode)
+    }
+
+    private func resetState() {
+        stopCursorTracking()
+        cancelAllKeyReleaseTimers()
+        pressedKeyCodes.removeAll()
+        recentText = ""
+    }
+
+    private func appendTypedCharacter(keyCode: CGKeyCode, modifierFlags: NSEvent.ModifierFlags) {
+        switch keyCode {
+        case CGKeyCode(kVK_Delete), CGKeyCode(kVK_ForwardDelete):
+            guard !recentText.isEmpty else { return }
+            recentText.removeLast()
+        default:
+            guard let character = KeyFormatter.typedCharacter(
+                keyCode: keyCode,
+                modifierFlags: modifierFlags
+            ) else { return }
+
+            if character == "\n" {
+                recentText.append(" ")
+            } else {
+                recentText.append(character)
+            }
+
+            if recentText.count > maxRecentCharacters {
+                recentText = String(recentText.suffix(maxRecentCharacters))
             }
         }
     }
 
-    private func stopIdleTimer() {
-        idleTimer?.invalidate()
-        idleTimer = nil
+    private func scheduleKeyRelease(for keyCode: CGKeyCode) {
+        keyReleaseTimers[keyCode]?.invalidate()
+        keyReleaseTimers[keyCode] = Timer.scheduledTimer(
+            withTimeInterval: keyReleaseFallback,
+            repeats: false
+        ) { [weak self] _ in
+            Task { @MainActor in
+                self?.releaseKey(keyCode)
+            }
+        }
+    }
+
+    private func releaseKey(_ keyCode: CGKeyCode) {
+        keyReleaseTimers[keyCode]?.invalidate()
+        keyReleaseTimers[keyCode] = nil
+        pressedKeyCodes.remove(keyCode)
+    }
+
+    private func cancelAllKeyReleaseTimers() {
+        keyReleaseTimers.values.forEach { $0.invalidate() }
+        keyReleaseTimers.removeAll()
+    }
+
+    private func syncCursorTracking() {
+        if isVisible && position.isFollowCursor {
+            startCursorTracking()
+        } else {
+            stopCursorTracking()
+        }
+    }
+
+    private func startCursorTracking() {
+        guard cursorTrackingTimer == nil else { return }
+        cursorTrackingTimer = Timer.scheduledTimer(withTimeInterval: 1.0 / 30.0, repeats: true) { [weak self] _ in
+            Task { @MainActor in
+                self?.repositionPanel()
+            }
+        }
+    }
+
+    private func stopCursorTracking() {
+        cursorTrackingTimer?.invalidate()
+        cursorTrackingTimer = nil
     }
 
     private func showPanel() {
@@ -109,7 +165,7 @@ final class TypingVisualizer: ObservableObject {
             )
             panel.isOpaque = false
             panel.backgroundColor = .clear
-            panel.hasShadow = false
+            panel.hasShadow = true
             panel.level = .floating
             panel.collectionBehavior = [.canJoinAllSpaces, .stationary, .ignoresCycle, .fullScreenAuxiliary]
             panel.ignoresMouseEvents = true
@@ -129,32 +185,71 @@ final class TypingVisualizer: ObservableObject {
     }
 
     private func hidePanel() {
-        stopIdleTimer()
+        stopCursorTracking()
         panel?.orderOut(nil)
     }
 
     private func repositionPanel() {
-        guard let panel, let screen = NSScreen.main else { return }
+        guard let panel else { return }
 
-        let visibleFrame = screen.visibleFrame
-        let panelWidth = Self.panelSize.width
-        let panelHeight = Self.panelSize.height
-        let bottomMargin: CGFloat = 72
-
-        let originX: CGFloat
-        switch position {
-        case .left:
-            originX = visibleFrame.minX + 24
-        case .center:
-            originX = visibleFrame.midX - panelWidth / 2
-        case .right:
-            originX = visibleFrame.maxX - panelWidth - 24
+        if position.isFollowCursor {
+            repositionToCursor(on: screenContainingMouse())
+            return
         }
 
-        let originY = visibleFrame.minY + bottomMargin
+        guard let screen = NSScreen.main else { return }
+        let frame = fixedFrame(for: position, on: screen)
+        panel.setFrame(frame, display: true)
+    }
+
+    private func repositionToCursor(on screen: NSScreen?) {
+        guard let panel, let screen else { return }
+
+        let visibleFrame = screen.visibleFrame
+        let mouse = NSEvent.mouseLocation
+        let panelWidth = Self.panelSize.width
+        let panelHeight = Self.panelSize.height
+
+        var originX = mouse.x + cursorOffset
+        var originY = mouse.y - panelHeight - cursorOffset
+
+        originX = min(max(originX, visibleFrame.minX + 8), visibleFrame.maxX - panelWidth - 8)
+        originY = min(max(originY, visibleFrame.minY + 8), visibleFrame.maxY - panelHeight - 8)
+
         panel.setFrame(
             NSRect(x: originX, y: originY, width: panelWidth, height: panelHeight),
             display: true
         )
+    }
+
+    private func fixedFrame(for position: VisualizerPosition, on screen: NSScreen) -> NSRect {
+        let visibleFrame = screen.visibleFrame
+        let panelWidth = Self.panelSize.width
+        let panelHeight = Self.panelSize.height
+
+        let originX: CGFloat
+        switch position {
+        case .topLeft, .bottomLeft:
+            originX = visibleFrame.minX + edgeMargin
+        case .topCenter, .bottomCenter, .followCursor:
+            originX = visibleFrame.midX - panelWidth / 2
+        case .topRight, .bottomRight:
+            originX = visibleFrame.maxX - panelWidth - edgeMargin
+        }
+
+        let originY: CGFloat
+        switch position {
+        case .topLeft, .topCenter, .topRight:
+            originY = visibleFrame.maxY - panelHeight - topMargin
+        case .bottomLeft, .bottomCenter, .bottomRight, .followCursor:
+            originY = visibleFrame.minY + bottomMargin
+        }
+
+        return NSRect(x: originX, y: originY, width: panelWidth, height: panelHeight)
+    }
+
+    private func screenContainingMouse() -> NSScreen? {
+        let mouse = NSEvent.mouseLocation
+        return NSScreen.screens.first { NSMouseInRect(mouse, $0.frame, false) } ?? NSScreen.main
     }
 }

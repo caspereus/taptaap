@@ -1,0 +1,16 @@
+{
+  "source": "/Users/user/Documents/iOS/Keyboo/Keyboo/KeybooApp.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Welcome to Taptaap",
+        "location": {
+          "startingColumn": 16,
+          "startingLine": 20
+        }
+      }
+    ]
+  },
+  "version": 1
+}

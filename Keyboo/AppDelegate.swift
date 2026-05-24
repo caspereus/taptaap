@@ -5,6 +5,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         enforceSingleInstance()
     }
 
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        Task { @MainActor in
+            SettingsServiceCoordinator.shared.start()
+        }
+    }
+
     private func enforceSingleInstance() {
         guard let bundleID = Bundle.main.bundleIdentifier else { return }
 

@@ -1,0 +1,16 @@
+{
+  "source": "/Users/user/Documents/iOS/Keyboo/Keyboo/UI/TypingSpeedHUD.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "%lld",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 39
+        }
+      }
+    ]
+  },
+  "version": 1
+}

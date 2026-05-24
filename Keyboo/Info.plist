@@ -3,6 +3,6 @@
 <plist version="1.0">
 <dict>
 	<key>NSListenEventUsageDescription</key>
-	<string>Keyboo reads key codes system-wide to play mechanical keyboard sounds. It never captures or records what you type.</string>
+	<string>Taptaap reads key codes system-wide to play mechanical keyboard sounds. It never captures or records what you type.</string>
 </dict>
 </plist>

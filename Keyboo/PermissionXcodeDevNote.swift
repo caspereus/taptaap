@@ -4,7 +4,7 @@ import SwiftUI
 struct PermissionXcodeDevNote: View {
     var body: some View {
         #if DEBUG
-        Text("Running from Xcode? Rebuilds can reset Input Monitoring until the app is signed with a Development Team. Re-enable Keyboo in System Settings after each Run if needed.")
+        Text("Running from Xcode? Rebuilds can reset Input Monitoring until the app is signed with a Development Team. Re-enable Taptaap in System Settings after each Run if needed.")
             .font(.caption)
             .foregroundStyle(.secondary)
             .fixedSize(horizontal: false, vertical: true)
