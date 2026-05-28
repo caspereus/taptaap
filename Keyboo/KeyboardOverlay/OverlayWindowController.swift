@@ -6,14 +6,16 @@ final class OverlayWindowController {
     private var panel: NSPanel?
     private var hostingView: NSHostingView<KeyboardOverlayView>?
     private var currentKeycaps: [String] = []
+    private var currentTheme: OverlayTheme = .graphite
 
     private let edgeMargin: CGFloat = 24
     private let bottomMargin: CGFloat = 72
     private let topMargin: CGFloat = 48
 
-    func show(keycaps: [String], position: OverlayPosition) {
-        ensurePanel(with: keycaps)
+    func show(keycaps: [String], position: OverlayPosition, theme: OverlayTheme) {
+        ensurePanel(with: keycaps, theme: theme)
         currentKeycaps = keycaps
+        currentTheme = theme
         reposition(to: position)
         panel?.orderFrontRegardless()
     }
@@ -27,7 +29,7 @@ final class OverlayWindowController {
         reposition(to: position)
     }
 
-    private func ensurePanel(with keycaps: [String]) {
+    private func ensurePanel(with keycaps: [String], theme: OverlayTheme) {
         if panel == nil {
             let panel = NSPanel(
                 contentRect: .zero,
@@ -47,8 +49,8 @@ final class OverlayWindowController {
             self.panel = panel
         }
 
-        if hostingView == nil || currentKeycaps != keycaps {
-            let hostingView = NSHostingView(rootView: KeyboardOverlayView(keycaps: keycaps))
+        if hostingView == nil || currentKeycaps != keycaps || currentTheme != theme {
+            let hostingView = NSHostingView(rootView: KeyboardOverlayView(keycaps: keycaps, theme: theme))
             hostingView.translatesAutoresizingMaskIntoConstraints = false
             panel?.contentView = hostingView
             self.hostingView = hostingView

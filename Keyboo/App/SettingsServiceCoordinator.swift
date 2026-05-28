@@ -100,6 +100,13 @@ final class SettingsServiceCoordinator {
             }
             .store(in: &cancellables)
 
+        settings.$overlayTheme
+            .dropFirst()
+            .sink { [weak self] _ in
+                self?.syncKeyboardOverlayConfiguration()
+            }
+            .store(in: &cancellables)
+
         permissions.$hasInputMonitoringAccess
             .dropFirst()
             .sink { [weak self] _ in
@@ -152,7 +159,8 @@ final class SettingsServiceCoordinator {
             showMode: settings.overlayShowMode,
             privacyMode: settings.overlayPrivacyMode,
             position: settings.overlayPosition,
-            hideDelay: settings.overlayHideDelay
+            hideDelay: settings.overlayHideDelay,
+            theme: settings.overlayTheme
         )
     }
 
@@ -161,7 +169,8 @@ final class SettingsServiceCoordinator {
             showMode: settings.overlayShowMode,
             privacyMode: settings.overlayPrivacyMode,
             position: settings.overlayPosition,
-            hideDelay: settings.overlayHideDelay
+            hideDelay: settings.overlayHideDelay,
+            theme: settings.overlayTheme
         )
     }
 }

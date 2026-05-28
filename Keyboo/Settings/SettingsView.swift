@@ -248,7 +248,10 @@ struct SettingsView: View {
             Text("Preview")
                 .font(.body.weight(.semibold))
 
-            KeyboardOverlayView(keycaps: overlayPreviewKeycaps)
+            KeyboardOverlayView(
+                keycaps: overlayPreviewKeycaps,
+                theme: settings.overlayTheme
+            )
                 .frame(maxWidth: .infinity, alignment: .center)
                 .padding(.vertical, 4)
 
@@ -326,6 +329,16 @@ struct SettingsView: View {
             OverlayPositionPicker(
                 selection: $settings.overlayPosition,
                 isEnabled: overlayControlsEnabled
+            )
+        }
+
+        VStack(alignment: .leading, spacing: 10) {
+            Text("Theme")
+                .font(.body.weight(.semibold))
+
+            OverlayThemePicker(
+                selection: $settings.overlayTheme,
+                isEnabled: true
             )
         }
 

@@ -21,6 +21,7 @@ final class AppSettings: ObservableObject {
         static let overlayPosition = "keyboo.overlayPosition"
         static let overlayHideDelay = "keyboo.overlayHideDelay"
         static let overlayPrivacyMode = "keyboo.overlayPrivacyMode"
+        static let overlayTheme = "keyboo.overlayTheme"
     }
 
     @Published var isEnabled: Bool {
@@ -89,6 +90,10 @@ final class AppSettings: ObservableObject {
         didSet { UserDefaults.standard.set(overlayPrivacyMode, forKey: Keys.overlayPrivacyMode) }
     }
 
+    @Published var overlayTheme: OverlayTheme {
+        didSet { UserDefaults.standard.set(overlayTheme.rawValue, forKey: Keys.overlayTheme) }
+    }
+
     @Published var requestedSettingsTab: SettingsTab?
 
     func openSettings(tab: SettingsTab? = nil) {
@@ -130,5 +135,8 @@ final class AppSettings: ObservableObject {
         ) ?? .bottomCenter
         overlayHideDelay = defaults.object(forKey: Keys.overlayHideDelay) as? Double ?? 1.0
         overlayPrivacyMode = defaults.object(forKey: Keys.overlayPrivacyMode) as? Bool ?? false
+        overlayTheme = OverlayTheme(
+            rawValue: defaults.string(forKey: Keys.overlayTheme) ?? OverlayTheme.graphite.rawValue
+        ) ?? .graphite
     }
 }

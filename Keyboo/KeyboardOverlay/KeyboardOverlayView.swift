@@ -2,12 +2,13 @@ import SwiftUI
 
 struct KeyboardOverlayView: View {
     let keycaps: [String]
+    var theme: OverlayTheme = .graphite
     @State private var isVisible = false
 
     var body: some View {
         HStack(spacing: 10) {
             ForEach(Array(keycaps.enumerated()), id: \.offset) { _, label in
-                KeycapView(label: label)
+                KeycapView(label: label, theme: theme)
             }
         }
         .fixedSize(horizontal: true, vertical: false)
@@ -15,8 +16,8 @@ struct KeyboardOverlayView: View {
         .padding(.vertical, 14)
         .background {
             RoundedRectangle(cornerRadius: 18, style: .continuous)
-                .fill(.black.opacity(0.62))
-                .shadow(color: .black.opacity(0.35), radius: 18, y: 6)
+                .fill(theme.containerColor)
+                .shadow(color: theme.shadowColor, radius: 18, y: 6)
         }
         .scaleEffect(isVisible ? 1 : 0.92)
         .opacity(isVisible ? 1 : 0)
@@ -36,6 +37,7 @@ struct KeyboardOverlayView: View {
 
 private struct KeycapView: View {
     let label: String
+    let theme: OverlayTheme
 
     private var isCompactLabel: Bool {
         label.count <= 1
@@ -44,17 +46,17 @@ private struct KeycapView: View {
     var body: some View {
         Text(label)
             .font(.system(size: isCompactLabel ? 22 : 18, weight: .semibold, design: .rounded))
-            .foregroundStyle(.white.opacity(0.95))
+            .foregroundStyle(theme.textColor)
             .lineLimit(1)
             .fixedSize(horizontal: true, vertical: false)
             .padding(.horizontal, isCompactLabel ? 14 : 12)
             .padding(.vertical, 10)
             .background {
                 RoundedRectangle(cornerRadius: 10, style: .continuous)
-                    .fill(.white.opacity(0.14))
+                    .fill(theme.keycapColor)
                     .overlay {
                         RoundedRectangle(cornerRadius: 10, style: .continuous)
-                            .strokeBorder(.white.opacity(0.18), lineWidth: 0.75)
+                            .strokeBorder(theme.keycapBorderColor, lineWidth: 0.75)
                     }
             }
             .frame(minWidth: isCompactLabel ? 48 : nil)
@@ -62,19 +64,19 @@ private struct KeycapView: View {
 }
 
 #Preview("Shortcut") {
-    KeyboardOverlayView(keycaps: ["⌘", "⇧", "P"])
+    KeyboardOverlayView(keycaps: ["⌘", "⇧", "P"], theme: .neon)
         .padding(40)
         .background(Color.gray.opacity(0.3))
 }
 
 #Preview("Special keys") {
-    KeyboardOverlayView(keycaps: ["Space"])
+    KeyboardOverlayView(keycaps: ["Space"], theme: .sunset)
         .padding(40)
         .background(Color.gray.opacity(0.3))
 }
 
 #Preview("Long shortcut") {
-    KeyboardOverlayView(keycaps: ["⌃", "⌥", "⇧", "⌘", "Delete"])
+    KeyboardOverlayView(keycaps: ["⌃", "⌥", "⇧", "⌘", "Delete"], theme: .forest)
         .padding(40)
         .background(Color.gray.opacity(0.3))
 }

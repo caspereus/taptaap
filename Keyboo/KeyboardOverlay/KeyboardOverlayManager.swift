@@ -17,6 +17,7 @@ final class KeyboardOverlayManager {
     private var privacyMode = false
     private var position: OverlayPosition = .bottomCenter
     private var hideDelay: TimeInterval = 1.0
+    private var theme: OverlayTheme = .graphite
 
     init(eventMonitor: KeyboardEventMonitoring = NSEventKeyboardMonitor()) {
         self.eventMonitor = eventMonitor
@@ -27,12 +28,14 @@ final class KeyboardOverlayManager {
         showMode: OverlayShowMode,
         privacyMode: Bool,
         position: OverlayPosition,
-        hideDelay: TimeInterval
+        hideDelay: TimeInterval,
+        theme: OverlayTheme
     ) {
         self.showMode = showMode
         self.privacyMode = privacyMode
         self.position = position
         self.hideDelay = hideDelay
+        self.theme = theme
         isActive = active
 
         if active {
@@ -47,12 +50,14 @@ final class KeyboardOverlayManager {
         showMode: OverlayShowMode,
         privacyMode: Bool,
         position: OverlayPosition,
-        hideDelay: TimeInterval
+        hideDelay: TimeInterval,
+        theme: OverlayTheme
     ) {
         self.showMode = showMode
         self.privacyMode = privacyMode
         self.position = position
         self.hideDelay = hideDelay
+        self.theme = theme
         windowController.updatePosition(position)
     }
 
@@ -81,7 +86,7 @@ final class KeyboardOverlayManager {
         guard !labels.isEmpty else { return }
         guard shouldDisplay(input: input, labels: labels) else { return }
 
-        windowController.show(keycaps: labels, position: position)
+        windowController.show(keycaps: labels, position: position, theme: theme)
         scheduleHide()
     }
 
