@@ -1,4 +1,5 @@
 import AppKit
+import Carbon
 import SwiftUI
 
 struct SettingsView: View {
@@ -7,6 +8,10 @@ struct SettingsView: View {
     @ObservedObject private var accessibility = AccessibilityPermissionManager.shared
     @State private var selectedTab: SettingsTab = .general
     @State private var launchAtLoginError: String?
+    @State private var previewPressedKeyCodes: Set<CGKeyCode> = []
+    @State private var previewCaptureFocused = false
+    @State private var overlayPreviewKeycaps: [String] = ["⌘", "⇧", "P"]
+    @State private var overlayPreviewCaptureFocused = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -14,8 +19,12 @@ struct SettingsView: View {
                 .padding(.horizontal, 20)
                 .padding(.top, 12)
                 .padding(.bottom, 8)
+                .zIndex(1)
 
             tabContent
+                .padding(.top, 4)
+                .clipped()
+                .zIndex(0)
         }
         .frame(width: 480, height: 520)
         .toolbar(removing: .title)
@@ -166,6 +175,33 @@ struct SettingsView: View {
 
     @ViewBuilder
     private var visualizerTab: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("Preview")
+                .font(.body.weight(.semibold))
+
+            KeyboardVisualizerView(
+                pressedKeyCodes: previewPressedKeyCodes,
+                theme: settings.visualizerTheme
+            )
+            .frame(maxWidth: .infinity, alignment: .center)
+            .padding(.vertical, 4)
+
+            VisualizerPreviewKeyCaptureView(
+                isFocused: $previewCaptureFocused,
+                onKeyDown: { keyCode, _ in
+                    previewPressedKeyCodes.insert(keyCode)
+                },
+                onKeyUp: { keyCode, _ in
+                    previewPressedKeyCodes.remove(keyCode)
+                }
+            )
+            .frame(height: 44)
+
+            Text("Only captures keys while focused. Click the box and type to test.")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+        }
+
         VStack(alignment: .leading, spacing: 6) {
             Toggle("Show While Typing", isOn: $settings.enableVisualizer)
                 .font(.body)
@@ -208,6 +244,34 @@ struct SettingsView: View {
 
     @ViewBuilder
     private var overlayTab: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("Preview")
+                .font(.body.weight(.semibold))
+
+            KeyboardOverlayView(keycaps: overlayPreviewKeycaps)
+                .frame(maxWidth: .infinity, alignment: .center)
+                .padding(.vertical, 4)
+
+            VisualizerPreviewKeyCaptureView(
+                isFocused: $overlayPreviewCaptureFocused,
+                onKeyDown: { keyCode, modifierFlags in
+                    let labels = KeyFormatter.keycapLabels(
+                        keyCode: UInt16(keyCode),
+                        modifierFlags: modifierFlags
+                    )
+                    if !labels.isEmpty {
+                        overlayPreviewKeycaps = labels
+                    }
+                },
+                onKeyUp: { _, _ in }
+            )
+            .frame(height: 44)
+
+            Text("Only captures keys while focused. Click the box and type to test.")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+        }
+
         VStack(alignment: .leading, spacing: 6) {
             Toggle("Enable Keyboard Overlay", isOn: $settings.enableKeyboardOverlay)
                 .font(.body)
@@ -311,20 +375,188 @@ struct SettingsView: View {
     }
 }
 
+private struct VisualizerPreviewKeyCaptureView: NSViewRepresentable {
+    @Binding var isFocused: Bool
+    let onKeyDown: (CGKeyCode, NSEvent.ModifierFlags) -> Void
+    let onKeyUp: (CGKeyCode, NSEvent.ModifierFlags) -> Void
+
+    func makeNSView(context: Context) -> VisualizerPreviewKeyCaptureNSView {
+        let view = VisualizerPreviewKeyCaptureNSView()
+        view.coordinator = context.coordinator
+        view.updateFocusState(isFocused)
+        return view
+    }
+
+    func updateNSView(_ nsView: VisualizerPreviewKeyCaptureNSView, context: Context) {
+        nsView.coordinator = context.coordinator
+        nsView.updateFocusState(isFocused)
+    }
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+
+    final class Coordinator: NSObject {
+        private let parent: VisualizerPreviewKeyCaptureView
+
+        init(_ parent: VisualizerPreviewKeyCaptureView) {
+            self.parent = parent
+        }
+
+        func didFocus(_ focused: Bool) {
+            DispatchQueue.main.async {
+                self.parent.isFocused = focused
+            }
+        }
+
+        func keyDown(_ keyCode: CGKeyCode, modifierFlags: NSEvent.ModifierFlags) {
+            DispatchQueue.main.async {
+                self.parent.onKeyDown(keyCode, modifierFlags)
+            }
+        }
+
+        func keyUp(_ keyCode: CGKeyCode, modifierFlags: NSEvent.ModifierFlags) {
+            DispatchQueue.main.async {
+                self.parent.onKeyUp(keyCode, modifierFlags)
+            }
+        }
+    }
+}
+
+private final class VisualizerPreviewKeyCaptureNSView: NSView {
+    weak var coordinator: VisualizerPreviewKeyCaptureView.Coordinator?
+
+    private let titleLabel: NSTextField = {
+        let label = NSTextField(labelWithString: "Click to test typing")
+        label.font = .systemFont(ofSize: NSFont.systemFontSize)
+        label.textColor = .secondaryLabelColor
+        label.alignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    override var acceptsFirstResponder: Bool { true }
+
+    override init(frame frameRect: NSRect) {
+        super.init(frame: frameRect)
+        wantsLayer = true
+        layer?.cornerRadius = 10
+        layer?.borderWidth = 1
+        layer?.borderColor = NSColor.separatorColor.cgColor
+        layer?.backgroundColor = NSColor.textBackgroundColor.withAlphaComponent(0.22).cgColor
+
+        addSubview(titleLabel)
+        NSLayoutConstraint.activate([
+            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
+            titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
+            titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
+        ])
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func mouseDown(with event: NSEvent) {
+        window?.makeFirstResponder(self)
+        super.mouseDown(with: event)
+    }
+
+    override func becomeFirstResponder() -> Bool {
+        let accepted = super.becomeFirstResponder()
+        if accepted {
+            coordinator?.didFocus(true)
+            updateAppearance(isFocused: true)
+        }
+        return accepted
+    }
+
+    override func resignFirstResponder() -> Bool {
+        let resigned = super.resignFirstResponder()
+        if resigned {
+            coordinator?.didFocus(false)
+            updateAppearance(isFocused: false)
+        }
+        return resigned
+    }
+
+    override func keyDown(with event: NSEvent) {
+        coordinator?.keyDown(CGKeyCode(event.keyCode), modifierFlags: event.modifierFlags)
+    }
+
+    override func keyUp(with event: NSEvent) {
+        coordinator?.keyUp(CGKeyCode(event.keyCode), modifierFlags: event.modifierFlags)
+    }
+
+    override func flagsChanged(with event: NSEvent) {
+        let modifierKeyCodes: [UInt16] = [
+            UInt16(kVK_Command),
+            UInt16(kVK_Shift),
+            UInt16(kVK_CapsLock),
+            UInt16(kVK_Option),
+            UInt16(kVK_Control),
+            UInt16(kVK_RightCommand),
+            UInt16(kVK_RightShift),
+            UInt16(kVK_RightOption),
+            UInt16(kVK_RightControl),
+            UInt16(kVK_Function)
+        ]
+        let keyCode = event.keyCode
+        guard modifierKeyCodes.contains(keyCode) else { return }
+
+        let keyCodeValue = CGKeyCode(keyCode)
+        if event.modifierFlags.contains(Self.modifierFlag(for: keyCode)) {
+            coordinator?.keyDown(keyCodeValue, modifierFlags: event.modifierFlags)
+        } else {
+            coordinator?.keyUp(keyCodeValue, modifierFlags: event.modifierFlags)
+        }
+    }
+
+    func updateFocusState(_ isFocused: Bool) {
+        updateAppearance(isFocused: isFocused)
+    }
+
+    private func updateAppearance(isFocused: Bool) {
+        layer?.borderColor = (isFocused ? NSColor.controlAccentColor : NSColor.separatorColor).cgColor
+        layer?.borderWidth = isFocused ? 2 : 1
+        titleLabel.stringValue = isFocused ? "Typing test active" : "Click to test typing"
+    }
+
+    private static func modifierFlag(for keyCode: UInt16) -> NSEvent.ModifierFlags {
+        switch keyCode {
+        case UInt16(kVK_Shift), UInt16(kVK_RightShift):
+            return .shift
+        case UInt16(kVK_Control), UInt16(kVK_RightControl):
+            return .control
+        case UInt16(kVK_Option), UInt16(kVK_RightOption):
+            return .option
+        case UInt16(kVK_Command), UInt16(kVK_RightCommand):
+            return .command
+        case UInt16(kVK_CapsLock):
+            return .capsLock
+        case UInt16(kVK_Function):
+            return .function
+        default:
+            return []
+        }
+    }
+}
+
 // MARK: - Components
 
 private struct SettingsTabContent<Content: View>: View {
     @ViewBuilder let content: Content
 
     var body: some View {
-        GlassEffectContainer(spacing: KeybooGlass.containerSpacing) {
+        GlassEffectContainer(spacing: 14) {
             ScrollView {
-                VStack(alignment: .leading, spacing: KeybooGlass.containerSpacing) {
+                VStack(alignment: .leading, spacing: 16) {
                     content
                 }
                 .padding(20)
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
+            .clipped()
         }
     }
 }
@@ -340,7 +572,7 @@ private struct SettingsAppHeader: View {
             HStack(spacing: 14) {
                 Image(nsImage: NSApplication.shared.applicationIconImage)
                     .resizable()
-                    .frame(width: 52, height: 52)
+                    .frame(width: 48, height: 48)
 
                 VStack(alignment: .leading, spacing: 3) {
                     Text("Taptaap")
@@ -361,13 +593,12 @@ private struct SettingsSection<Content: View>: View {
     @ViewBuilder let content: Content
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
+        VStack(alignment: .leading, spacing: 10) {
             if let title {
                 Text(title)
                     .font(.footnote.weight(.semibold))
                     .foregroundStyle(.tertiary)
                     .textCase(.uppercase)
-                    .padding(.leading, 4)
             }
 
             GlassCard {

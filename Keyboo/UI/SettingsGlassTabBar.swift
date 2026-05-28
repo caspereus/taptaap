@@ -33,22 +33,12 @@ struct SettingsGlassTabBar: View {
 
     var body: some View {
         HStack(spacing: 0) {
-            ForEach(Array(SettingsTab.allCases.enumerated()), id: \.element.id) { index, tab in
-                if index > 0 {
-                    tabDivider
-                }
+            ForEach(SettingsTab.allCases) { tab in
                 tabButton(for: tab)
             }
         }
-        .padding(3)
+        .padding(5)
         .glassEffect(.regular, in: Capsule())
-    }
-
-    private var tabDivider: some View {
-        Rectangle()
-            .fill(Color.primary.opacity(0.1))
-            .frame(width: 1, height: 20)
-            .padding(.horizontal, 1)
     }
 
     private func tabButton(for tab: SettingsTab) -> some View {
@@ -59,16 +49,19 @@ struct SettingsGlassTabBar: View {
                 selection = tab
             }
         } label: {
-            HStack(spacing: 5) {
+            HStack(spacing: 4) {
                 Image(systemName: tab.systemImage)
-                    .font(.system(size: 11, weight: .semibold))
+                    .font(.system(size: 12, weight: .semibold))
                     .symbolRenderingMode(.hierarchical)
 
                 Text(tab.title)
-                    .font(.system(size: 11, weight: .medium))
+                    .font(.system(size: 12, weight: .medium))
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+                    .minimumScaleFactor(0.9)
             }
-            .padding(.horizontal, 12)
-            .padding(.vertical, 6)
+            .padding(.horizontal, 14)
+            .padding(.vertical, 10)
             .frame(maxWidth: .infinity)
             .contentShape(Capsule())
         }
