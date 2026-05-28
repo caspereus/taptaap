@@ -18,16 +18,18 @@ struct KeyboardRow: Identifiable {
 }
 
 enum KeyboardLayout {
-    static let unitWidth: CGFloat = 16
+    static let unitWidth: CGFloat = 17
+    static let keyHeight: CGFloat = 20
     static let keySpacing: CGFloat = 3
-    static let rowSpacing: CGFloat = 3
+    static let rowSpacing: CGFloat = 4
 
-    /// Compact four-row US QWERTY — matches a 60%-style board with no function row.
+    /// Compact four-row US ANSI layout — no function or number row, aligned modifier columns.
     static let rows: [KeyboardRow] = [
         KeyboardRow(
-            id: "top-alpha",
+            id: "alpha-1",
             indentUnits: 0,
             keys: [
+                .key(CGKeyCode(kVK_Tab), width: 1.5),
                 .key(CGKeyCode(kVK_ANSI_Q)),
                 .key(CGKeyCode(kVK_ANSI_W)),
                 .key(CGKeyCode(kVK_ANSI_E)),
@@ -39,13 +41,15 @@ enum KeyboardLayout {
                 .key(CGKeyCode(kVK_ANSI_O)),
                 .key(CGKeyCode(kVK_ANSI_P)),
                 .key(CGKeyCode(kVK_ANSI_LeftBracket)),
-                .key(CGKeyCode(kVK_ANSI_RightBracket))
+                .key(CGKeyCode(kVK_ANSI_RightBracket)),
+                .key(CGKeyCode(kVK_Delete), width: 1.5)
             ]
         ),
         KeyboardRow(
-            id: "home",
-            indentUnits: 0.35,
+            id: "alpha-2",
+            indentUnits: 0,
             keys: [
+                .key(CGKeyCode(kVK_CapsLock), width: 1.75),
                 .key(CGKeyCode(kVK_ANSI_A)),
                 .key(CGKeyCode(kVK_ANSI_S)),
                 .key(CGKeyCode(kVK_ANSI_D)),
@@ -57,14 +61,14 @@ enum KeyboardLayout {
                 .key(CGKeyCode(kVK_ANSI_L)),
                 .key(CGKeyCode(kVK_ANSI_Semicolon)),
                 .key(CGKeyCode(kVK_ANSI_Quote)),
-                .key(CGKeyCode(kVK_Return), width: 1.5)
+                .key(CGKeyCode(kVK_Return), width: 2.25)
             ]
         ),
         KeyboardRow(
-            id: "bottom-alpha",
-            indentUnits: 0.65,
+            id: "alpha-3",
+            indentUnits: 0,
             keys: [
-                .key(CGKeyCode(kVK_Shift), width: 1.5),
+                .key(CGKeyCode(kVK_Shift), width: 2.25),
                 .key(CGKeyCode(kVK_ANSI_Z)),
                 .key(CGKeyCode(kVK_ANSI_X)),
                 .key(CGKeyCode(kVK_ANSI_C)),
@@ -75,7 +79,7 @@ enum KeyboardLayout {
                 .key(CGKeyCode(kVK_ANSI_Comma)),
                 .key(CGKeyCode(kVK_ANSI_Period)),
                 .key(CGKeyCode(kVK_ANSI_Slash)),
-                .key(CGKeyCode(kVK_RightShift), width: 1.75)
+                .key(CGKeyCode(kVK_RightShift), width: 2.75)
             ]
         ),
         KeyboardRow(
@@ -85,7 +89,7 @@ enum KeyboardLayout {
                 .key(CGKeyCode(kVK_Control), width: 1.1),
                 .key(CGKeyCode(kVK_Option), width: 1.1),
                 .key(CGKeyCode(kVK_Command), width: 1.1),
-                .key(CGKeyCode(kVK_Space), width: 5.2),
+                .key(CGKeyCode(kVK_Space), width: 9.6),
                 .key(CGKeyCode(kVK_RightCommand), width: 1.1),
                 .key(CGKeyCode(kVK_RightOption), width: 1.1)
             ]
@@ -95,7 +99,7 @@ enum KeyboardLayout {
     static var contentSize: CGSize {
         let maxRowWidth = rows.map { rowWidth(for: $0) }.max() ?? 0
         let rowCount = CGFloat(rows.count)
-        let height = rowCount * unitWidth + max(0, rowCount - 1) * rowSpacing
+        let height = rowCount * keyHeight + max(0, rowCount - 1) * rowSpacing
         return CGSize(width: maxRowWidth, height: height)
     }
 

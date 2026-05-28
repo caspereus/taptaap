@@ -77,6 +77,29 @@ enum KeyFormatter {
         specialKeyLabel(for: keyCode) != nil
     }
 
+    /// Short label for the keyboard visualizer keycap.
+    static func visualizerLabel(for keyCode: UInt16) -> String? {
+        switch Int(keyCode) {
+        case kVK_Shift, kVK_RightShift: return "⇧"
+        case kVK_Control, kVK_RightControl: return "⌃"
+        case kVK_Option, kVK_RightOption: return "⌥"
+        case kVK_Command, kVK_RightCommand: return "⌘"
+        case kVK_CapsLock: return "⇪"
+        case kVK_Tab: return "⇥"
+        case kVK_Delete, kVK_ForwardDelete: return "⌫"
+        case kVK_Return, kVK_ANSI_KeypadEnter: return "↩"
+        case kVK_Space: return nil
+        default:
+            if let letter = letterLabels[keyCode] {
+                return letter.lowercased()
+            }
+            if let punctuation = punctuationLabel(for: keyCode, shiftHeld: false) {
+                return punctuation
+            }
+            return nil
+        }
+    }
+
     /// Maps a key event to the character it would produce on a US QWERTY layout.
     static func typedCharacter(keyCode: UInt16, modifierFlags: NSEvent.ModifierFlags) -> String? {
         guard !modifierKeyCodes.contains(keyCode) else { return nil }

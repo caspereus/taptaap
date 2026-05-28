@@ -1,5 +1,4 @@
 import AppKit
-import Carbon
 import Combine
 import CoreGraphics
 import SwiftUI
@@ -10,18 +9,16 @@ final class TypingVisualizer: ObservableObject {
 
     private static let horizontalPadding: CGFloat = 28
     private static let verticalPadding: CGFloat = 36
-    private static let textRowHeight: CGFloat = 24
 
     static var panelSize: NSSize {
         let keyboard = KeyboardLayout.contentSize
         return NSSize(
             width: keyboard.width + horizontalPadding,
-            height: keyboard.height + verticalPadding + textRowHeight
+            height: keyboard.height + verticalPadding
         )
     }
 
     @Published private(set) var pressedKeyCodes: Set<CGKeyCode> = []
-    @Published private(set) var recentText: String = ""
     @Published private(set) var theme: VisualizerTheme = .arctic
 
     private var panel: NSPanel?
@@ -34,7 +31,6 @@ final class TypingVisualizer: ObservableObject {
     private let bottomMargin: CGFloat = 72
     private let topMargin: CGFloat = 12
     private let cursorOffset: CGFloat = 20
-    private let maxRecentCharacters = 48
     private let keyReleaseFallback: TimeInterval = 0.12
 
     private init() {}
@@ -63,12 +59,11 @@ final class TypingVisualizer: ObservableObject {
         self.theme = theme
     }
 
-    func recordKeyDown(keyCode: CGKeyCode, modifierFlags: NSEvent.ModifierFlags) {
+    func recordKeyDown(keyCode: CGKeyCode) {
         guard isVisible else { return }
 
         pressedKeyCodes.insert(keyCode)
         scheduleKeyRelease(for: keyCode)
-        appendTypedCharacter(keyCode: keyCode, modifierFlags: modifierFlags)
 
         if position.isFollowCursor {
             repositionPanel()
@@ -84,30 +79,6 @@ final class TypingVisualizer: ObservableObject {
         stopCursorTracking()
         cancelAllKeyReleaseTimers()
         pressedKeyCodes.removeAll()
-        recentText = ""
-    }
-
-    private func appendTypedCharacter(keyCode: CGKeyCode, modifierFlags: NSEvent.ModifierFlags) {
-        switch keyCode {
-        case CGKeyCode(kVK_Delete), CGKeyCode(kVK_ForwardDelete):
-            guard !recentText.isEmpty else { return }
-            recentText.removeLast()
-        default:
-            guard let character = KeyFormatter.typedCharacter(
-                keyCode: keyCode,
-                modifierFlags: modifierFlags
-            ) else { return }
-
-            if character == "\n" {
-                recentText.append(" ")
-            } else {
-                recentText.append(character)
-            }
-
-            if recentText.count > maxRecentCharacters {
-                recentText = String(recentText.suffix(maxRecentCharacters))
-            }
-        }
     }
 
     private func scheduleKeyRelease(for keyCode: CGKeyCode) {
@@ -175,9 +146,13 @@ final class TypingVisualizer: ObservableObject {
             let hostingView = NSHostingView(
                 rootView: TypingVisualizerView(visualizer: self)
             )
-            hostingView.frame = NSRect(origin: .zero, size: Self.panelSize)
             panel.contentView = hostingView
             self.panel = panel
+        }
+
+        let size = Self.panelSize
+        if let hostingView = panel?.contentView as? NSHostingView<TypingVisualizerView> {
+            hostingView.frame = NSRect(origin: .zero, size: size)
         }
 
         repositionPanel()
@@ -185,7 +160,6 @@ final class TypingVisualizer: ObservableObject {
     }
 
     private func hidePanel() {
-        stopCursorTracking()
         panel?.orderOut(nil)
     }
 
@@ -227,25 +201,25 @@ final class TypingVisualizer: ObservableObject {
         let panelWidth = Self.panelSize.width
         let panelHeight = Self.panelSize.height
 
-        let originX: CGFloat
+        let origin: CGPoint
         switch position {
-        case .topLeft, .bottomLeft:
-            originX = visibleFrame.minX + edgeMargin
-        case .topCenter, .bottomCenter, .followCursor:
-            originX = visibleFrame.midX - panelWidth / 2
-        case .topRight, .bottomRight:
-            originX = visibleFrame.maxX - panelWidth - edgeMargin
+        case .topLeft:
+            origin = CGPoint(x: visibleFrame.minX + edgeMargin, y: visibleFrame.maxY - panelHeight - topMargin)
+        case .topCenter:
+            origin = CGPoint(x: visibleFrame.midX - panelWidth / 2, y: visibleFrame.maxY - panelHeight - topMargin)
+        case .topRight:
+            origin = CGPoint(x: visibleFrame.maxX - panelWidth - edgeMargin, y: visibleFrame.maxY - panelHeight - topMargin)
+        case .bottomLeft:
+            origin = CGPoint(x: visibleFrame.minX + edgeMargin, y: visibleFrame.minY + bottomMargin)
+        case .bottomCenter:
+            origin = CGPoint(x: visibleFrame.midX - panelWidth / 2, y: visibleFrame.minY + bottomMargin)
+        case .bottomRight:
+            origin = CGPoint(x: visibleFrame.maxX - panelWidth - edgeMargin, y: visibleFrame.minY + bottomMargin)
+        case .followCursor:
+            fatalError("followCursor is handled by repositionToCursor")
         }
 
-        let originY: CGFloat
-        switch position {
-        case .topLeft, .topCenter, .topRight:
-            originY = visibleFrame.maxY - panelHeight - topMargin
-        case .bottomLeft, .bottomCenter, .bottomRight, .followCursor:
-            originY = visibleFrame.minY + bottomMargin
-        }
-
-        return NSRect(x: originX, y: originY, width: panelWidth, height: panelHeight)
+        return NSRect(origin: origin, size: NSSize(width: panelWidth, height: panelHeight))
     }
 
     private func screenContainingMouse() -> NSScreen? {

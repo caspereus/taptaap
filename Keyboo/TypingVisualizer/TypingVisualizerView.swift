@@ -6,7 +6,6 @@ struct TypingVisualizerView: View {
     var body: some View {
         KeyboardVisualizerView(
             pressedKeyCodes: visualizer.pressedKeyCodes,
-            recentText: visualizer.recentText,
             theme: visualizer.theme
         )
         .frame(width: TypingVisualizer.panelSize.width, height: TypingVisualizer.panelSize.height)

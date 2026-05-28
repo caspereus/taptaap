@@ -71,9 +71,7 @@ final class KeyboardEventMonitor {
     }
 
     private func runEventTap(on thread: Thread) {
-        let keyDownMask = 1 << CGEventType.keyDown.rawValue
-        let keyUpMask = 1 << CGEventType.keyUp.rawValue
-        let mask = CGEventMask(keyDownMask | keyUpMask)
+        let mask: CGEventMask = (1 << CGEventType.keyDown.rawValue) | (1 << CGEventType.keyUp.rawValue)
         let callback: CGEventTapCallBack = { _, type, event, userInfo in
             guard let userInfo else {
                 return Unmanaged.passUnretained(event)
@@ -84,26 +82,17 @@ final class KeyboardEventMonitor {
                 return Unmanaged.passUnretained(event)
             }
 
-            // Privacy: only the virtual key code and modifier flags are read — never typed text.
+            // Privacy: only the virtual key code is read — never typed text.
             let keyCode = CGKeyCode(event.getIntegerValueField(.keyboardEventKeycode))
-            let modifierFlags = NSEvent.ModifierFlags(rawValue: UInt(event.flags.rawValue))
 
             if type == .keyDown {
                 SoundEngine.shared.play(keyCode: keyCode)
-
-                DispatchQueue.main.async {
-                    Task { @MainActor in
-                        TypingVisualizer.shared.recordKeyDown(
-                            keyCode: keyCode,
-                            modifierFlags: modifierFlags
-                        )
-                    }
+                Task { @MainActor in
+                    TypingVisualizer.shared.recordKeyDown(keyCode: keyCode)
                 }
             } else if type == .keyUp {
-                DispatchQueue.main.async {
-                    Task { @MainActor in
-                        TypingVisualizer.shared.recordKeyUp(keyCode: keyCode)
-                    }
+                Task { @MainActor in
+                    TypingVisualizer.shared.recordKeyUp(keyCode: keyCode)
                 }
             }
 

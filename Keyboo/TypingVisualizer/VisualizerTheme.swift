@@ -38,12 +38,25 @@ enum VisualizerTheme: String, CaseIterable, Identifiable {
         Color(white: 0.24)
     }
 
+    var keyboardKeyBorderColor: Color {
+        Color(white: 0.32)
+    }
+
     var keyboardActiveKeyColor: Color {
-        Color(white: 0.84)
+        accentColor.opacity(0.92)
     }
 
     var keyboardTextColor: Color {
         Color(white: 0.55)
+    }
+
+    var keyboardActiveTextColor: Color {
+        switch self {
+        case .arctic, .matcha, .retro, .sakura, .sunset:
+            Color(white: 0.12)
+        default:
+            Color(white: 0.96)
+        }
     }
 
     var swatches: [Color] {
