@@ -1,0 +1,201 @@
+{
+  "" : {
+    "const-values" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/Taptaap-primary.swiftconstvalues",
+    "dependencies" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/Taptaap-primary.d",
+    "diagnostics" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/Taptaap-primary.dia",
+    "emit-module-dependencies" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/Taptaap-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/Taptaap-primary-emit-module.dia",
+    "pch" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/Taptaap-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/Taptaap-primary.swiftdeps"
+  },
+  "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/DerivedSources/GeneratedAssetSymbols.swift" : {
+    "index-unit-output-path" : "/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/GeneratedAssetSymbols.o",
+    "llvm-bc" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/GeneratedAssetSymbols.bc",
+    "object" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/GeneratedAssetSymbols.o"
+  },
+  "/Users/user/Documents/iOS/Keyboo/Keyboo/AccessibilityPermissionManager.swift" : {
+    "index-unit-output-path" : "/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/AccessibilityPermissionManager.o",
+    "llvm-bc" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/AccessibilityPermissionManager.bc",
+    "object" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/AccessibilityPermissionManager.o"
+  },
+  "/Users/user/Documents/iOS/Keyboo/Keyboo/AppDelegate.swift" : {
+    "index-unit-output-path" : "/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/AppDelegate.o",
+    "llvm-bc" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/AppDelegate.bc",
+    "object" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/AppDelegate.o"
+  },
+  "/Users/user/Documents/iOS/Keyboo/Keyboo/AppSettings.swift" : {
+    "index-unit-output-path" : "/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/AppSettings.o",
+    "llvm-bc" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/AppSettings.bc",
+    "object" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/AppSettings.o"
+  },
+  "/Users/user/Documents/iOS/Keyboo/Keyboo/InstallLocation.swift" : {
+    "index-unit-output-path" : "/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/InstallLocation.o",
+    "llvm-bc" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/InstallLocation.bc",
+    "object" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/InstallLocation.o"
+  },
+  "/Users/user/Documents/iOS/Keyboo/Keyboo/KeyCodeMapper.swift" : {
+    "index-unit-output-path" : "/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/KeyCodeMapper.o",
+    "llvm-bc" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/KeyCodeMapper.bc",
+    "object" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/KeyCodeMapper.o"
+  },
+  "/Users/user/Documents/iOS/Keyboo/Keyboo/KeyFormatter.swift" : {
+    "index-unit-output-path" : "/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/KeyFormatter.o",
+    "llvm-bc" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/KeyFormatter.bc",
+    "object" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/KeyFormatter.o"
+  },
+  "/Users/user/Documents/iOS/Keyboo/Keyboo/KeyboardEventMonitor.swift" : {
+    "index-unit-output-path" : "/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/KeyboardEventMonitor.o",
+    "llvm-bc" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/KeyboardEventMonitor.bc",
+    "object" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/KeyboardEventMonitor.o"
+  },
+  "/Users/user/Documents/iOS/Keyboo/Keyboo/KeyboardLayout.swift" : {
+    "index-unit-output-path" : "/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/KeyboardLayout.o",
+    "llvm-bc" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/KeyboardLayout.bc",
+    "object" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/KeyboardLayout.o"
+  },
+  "/Users/user/Documents/iOS/Keyboo/Keyboo/KeyboardOverlayEventMonitor.swift" : {
+    "index-unit-output-path" : "/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/KeyboardOverlayEventMonitor.o",
+    "llvm-bc" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/KeyboardOverlayEventMonitor.bc",
+    "object" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/KeyboardOverlayEventMonitor.o"
+  },
+  "/Users/user/Documents/iOS/Keyboo/Keyboo/KeyboardOverlayManager.swift" : {
+    "index-unit-output-path" : "/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/KeyboardOverlayManager.o",
+    "llvm-bc" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/KeyboardOverlayManager.bc",
+    "object" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/KeyboardOverlayManager.o"
+  },
+  "/Users/user/Documents/iOS/Keyboo/Keyboo/KeyboardOverlayView.swift" : {
+    "index-unit-output-path" : "/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/KeyboardOverlayView.o",
+    "llvm-bc" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/KeyboardOverlayView.bc",
+    "object" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/KeyboardOverlayView.o"
+  },
+  "/Users/user/Documents/iOS/Keyboo/Keyboo/KeybooApp.swift" : {
+    "index-unit-output-path" : "/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/KeybooApp.o",
+    "llvm-bc" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/KeybooApp.bc",
+    "object" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/KeybooApp.o"
+  },
+  "/Users/user/Documents/iOS/Keyboo/Keyboo/LaunchAtLoginManager.swift" : {
+    "index-unit-output-path" : "/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/LaunchAtLoginManager.o",
+    "llvm-bc" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/LaunchAtLoginManager.bc",
+    "object" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/LaunchAtLoginManager.o"
+  },
+  "/Users/user/Documents/iOS/Keyboo/Keyboo/MenuBarView.swift" : {
+    "index-unit-output-path" : "/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/MenuBarView.o",
+    "llvm-bc" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/MenuBarView.bc",
+    "object" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/MenuBarView.o"
+  },
+  "/Users/user/Documents/iOS/Keyboo/Keyboo/OverlayPosition.swift" : {
+    "index-unit-output-path" : "/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/OverlayPosition.o",
+    "llvm-bc" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/OverlayPosition.bc",
+    "object" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/OverlayPosition.o"
+  },
+  "/Users/user/Documents/iOS/Keyboo/Keyboo/OverlayShowMode.swift" : {
+    "index-unit-output-path" : "/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/OverlayShowMode.o",
+    "llvm-bc" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/OverlayShowMode.bc",
+    "object" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/OverlayShowMode.o"
+  },
+  "/Users/user/Documents/iOS/Keyboo/Keyboo/OverlayWindowController.swift" : {
+    "index-unit-output-path" : "/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/OverlayWindowController.o",
+    "llvm-bc" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/OverlayWindowController.bc",
+    "object" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/OverlayWindowController.o"
+  },
+  "/Users/user/Documents/iOS/Keyboo/Keyboo/PermissionManager.swift" : {
+    "index-unit-output-path" : "/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/PermissionManager.o",
+    "llvm-bc" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/PermissionManager.bc",
+    "object" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/PermissionManager.o"
+  },
+  "/Users/user/Documents/iOS/Keyboo/Keyboo/PermissionOnboardingView.swift" : {
+    "index-unit-output-path" : "/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/PermissionOnboardingView.o",
+    "llvm-bc" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/PermissionOnboardingView.bc",
+    "object" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/PermissionOnboardingView.o"
+  },
+  "/Users/user/Documents/iOS/Keyboo/Keyboo/PermissionXcodeDevNote.swift" : {
+    "index-unit-output-path" : "/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/PermissionXcodeDevNote.o",
+    "llvm-bc" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/PermissionXcodeDevNote.bc",
+    "object" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/PermissionXcodeDevNote.o"
+  },
+  "/Users/user/Documents/iOS/Keyboo/Keyboo/SettingsView.swift" : {
+    "index-unit-output-path" : "/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/SettingsView.o",
+    "llvm-bc" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/SettingsView.bc",
+    "object" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/SettingsView.o"
+  },
+  "/Users/user/Documents/iOS/Keyboo/Keyboo/SoundEngine.swift" : {
+    "index-unit-output-path" : "/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/SoundEngine.o",
+    "llvm-bc" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/SoundEngine.bc",
+    "object" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/SoundEngine.o"
+  },
+  "/Users/user/Documents/iOS/Keyboo/Keyboo/SoundProfile.swift" : {
+    "index-unit-output-path" : "/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/SoundProfile.o",
+    "llvm-bc" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/SoundProfile.bc",
+    "object" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/SoundProfile.o"
+  },
+  "/Users/user/Documents/iOS/Keyboo/Keyboo/SwitchSwatchView.swift" : {
+    "index-unit-output-path" : "/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/SwitchSwatchView.o",
+    "llvm-bc" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/SwitchSwatchView.bc",
+    "object" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/SwitchSwatchView.o"
+  },
+  "/Users/user/Documents/iOS/Keyboo/Keyboo/TypingVisualizer.swift" : {
+    "index-unit-output-path" : "/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/TypingVisualizer.o",
+    "llvm-bc" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/TypingVisualizer.bc",
+    "object" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/TypingVisualizer.o"
+  },
+  "/Users/user/Documents/iOS/Keyboo/Keyboo/TypingVisualizerView.swift" : {
+    "index-unit-output-path" : "/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/TypingVisualizerView.o",
+    "llvm-bc" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/TypingVisualizerView.bc",
+    "object" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/TypingVisualizerView.o"
+  },
+  "/Users/user/Documents/iOS/Keyboo/Keyboo/UI/GlassCapsuleSurface.swift" : {
+    "index-unit-output-path" : "/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/GlassCapsuleSurface.o",
+    "llvm-bc" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/GlassCapsuleSurface.bc",
+    "object" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/GlassCapsuleSurface.o"
+  },
+  "/Users/user/Documents/iOS/Keyboo/Keyboo/UI/GlassCard.swift" : {
+    "index-unit-output-path" : "/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/GlassCard.o",
+    "llvm-bc" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/GlassCard.bc",
+    "object" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/GlassCard.o"
+  },
+  "/Users/user/Documents/iOS/Keyboo/Keyboo/UI/KeyboardVisualizerView.swift" : {
+    "index-unit-output-path" : "/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/KeyboardVisualizerView.o",
+    "llvm-bc" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/KeyboardVisualizerView.bc",
+    "object" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/KeyboardVisualizerView.o"
+  },
+  "/Users/user/Documents/iOS/Keyboo/Keyboo/UI/KeybooGlass.swift" : {
+    "index-unit-output-path" : "/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/KeybooGlass.o",
+    "llvm-bc" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/KeybooGlass.bc",
+    "object" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/KeybooGlass.o"
+  },
+  "/Users/user/Documents/iOS/Keyboo/Keyboo/UI/OverlayPositionPicker.swift" : {
+    "index-unit-output-path" : "/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/OverlayPositionPicker.o",
+    "llvm-bc" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/OverlayPositionPicker.bc",
+    "object" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/OverlayPositionPicker.o"
+  },
+  "/Users/user/Documents/iOS/Keyboo/Keyboo/UI/SettingsGlassTabBar.swift" : {
+    "index-unit-output-path" : "/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/SettingsGlassTabBar.o",
+    "llvm-bc" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/SettingsGlassTabBar.bc",
+    "object" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/SettingsGlassTabBar.o"
+  },
+  "/Users/user/Documents/iOS/Keyboo/Keyboo/UI/TypingSpeedHUD.swift" : {
+    "index-unit-output-path" : "/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/TypingSpeedHUD.o",
+    "llvm-bc" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/TypingSpeedHUD.bc",
+    "object" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/TypingSpeedHUD.o"
+  },
+  "/Users/user/Documents/iOS/Keyboo/Keyboo/UI/VisualizerPositionPicker.swift" : {
+    "index-unit-output-path" : "/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/VisualizerPositionPicker.o",
+    "llvm-bc" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/VisualizerPositionPicker.bc",
+    "object" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/VisualizerPositionPicker.o"
+  },
+  "/Users/user/Documents/iOS/Keyboo/Keyboo/UI/VisualizerThemePicker.swift" : {
+    "index-unit-output-path" : "/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/VisualizerThemePicker.o",
+    "llvm-bc" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/VisualizerThemePicker.bc",
+    "object" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/VisualizerThemePicker.o"
+  },
+  "/Users/user/Documents/iOS/Keyboo/Keyboo/VisualizerPosition.swift" : {
+    "index-unit-output-path" : "/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/VisualizerPosition.o",
+    "llvm-bc" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/VisualizerPosition.bc",
+    "object" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/VisualizerPosition.o"
+  },
+  "/Users/user/Documents/iOS/Keyboo/Keyboo/VisualizerTheme.swift" : {
+    "index-unit-output-path" : "/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/VisualizerTheme.o",
+    "llvm-bc" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/VisualizerTheme.bc",
+    "object" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/VisualizerTheme.o"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "/Users/user/Documents/iOS/Keyboo/Keyboo/UI/GlassCapsuleSurface.swift" : {
+    "abi-baseline-json" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/Taptaap.abi.json",
+    "const-values" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/Taptaap-primary.swiftconstvalues",
+    "dependencies" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/Taptaap-primary.d",
+    "diagnostics" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/Taptaap-primary.dia",
+    "objc-header" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/Taptaap-Swift.h",
+    "swiftdoc" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/Taptaap.swiftdoc",
+    "swiftmodule" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/Taptaap.swiftmodule",
+    "swiftsourceinfo" : "/Users/user/Documents/iOS/Keyboo/.build/DerivedData/Build/Intermediates.noindex/Keyboo.build/Release/Taptaap.build/Objects-normal/arm64/Taptaap.swiftsourceinfo"
+  }
+}

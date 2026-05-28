@@ -1,0 +1,176 @@
+{
+  "source": "/Users/user/Documents/iOS/Keyboo/Keyboo/SettingsView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Hide normal letters unless a modifier key is held.",
+        "location": {
+          "startingColumn": 14,
+          "startingLine": 253
+        }
+      },
+      {
+        "comment": "",
+        "key": "Privacy Mode",
+        "location": {
+          "startingColumn": 16,
+          "startingLine": 250
+        }
+      },
+      {
+        "comment": "",
+        "key": "Launch at Login",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 70
+        }
+      },
+      {
+        "comment": "",
+        "key": "Open System Settings",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 89
+        }
+      },
+      {
+        "comment": "",
+        "key": "Request Permission",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 94
+        }
+      },
+      {
+        "comment": "",
+        "key": "Taptaap only reads virtual key codes to play sounds. It never captures, stores, or transmits typed text.",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 116
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld%%",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 131
+        }
+      },
+      {
+        "comment": "",
+        "key": "Input Monitoring permission is required to show the typing visualizer.",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 175
+        }
+      },
+      {
+        "comment": "",
+        "key": "Show While Typing",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 170
+        }
+      },
+      {
+        "comment": "",
+        "key": "Position",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 183
+        }
+      },
+      {
+        "comment": "",
+        "key": "Theme",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 193
+        }
+      },
+      {
+        "comment": "",
+        "key": "Enable Accessibility permission to show keyboard overlay.",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 217
+        }
+      },
+      {
+        "comment": "",
+        "key": "Enable Keyboard Overlay",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 212
+        }
+      },
+      {
+        "comment": "",
+        "key": "Open System Settings",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 223
+        }
+      },
+      {
+        "comment": "",
+        "key": "Request Permission",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 228
+        }
+      },
+      {
+        "comment": "",
+        "key": "Show Mode",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 238
+        }
+      },
+      {
+        "comment": "",
+        "key": "Show Mode",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 241
+        }
+      },
+      {
+        "comment": "",
+        "key": "Position",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 259
+        }
+      },
+      {
+        "comment": "",
+        "key": "Hide Delay",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 270
+        }
+      },
+      {
+        "comment": "",
+        "key": "Key presses are shown on screen only and are never stored, logged, or transmitted.",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 283
+        }
+      },
+      {
+        "comment": "",
+        "key": "Taptaap",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 346
+        }
+      }
+    ]
+  },
+  "version": 1
+}
