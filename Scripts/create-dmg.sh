@@ -7,7 +7,6 @@ APP_NAME="Taptaap"
 DERIVED_DATA="$ROOT/build/DerivedData"
 BUILD_PRODUCTS="$DERIVED_DATA/Build/Products/Release"
 STAGING="$ROOT/build/dmg-staging"
-DMG_PATH="$ROOT/build/${APP_NAME}.dmg"
 VOLUME_NAME="$APP_NAME"
 
 cd "$ROOT"
@@ -26,6 +25,13 @@ if [[ ! -d "$APP_PATH" ]]; then
   exit 1
 fi
 
+PLIST="$APP_PATH/Contents/Info.plist"
+VERSION=$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" "$PLIST")
+BUILD=$(/usr/libexec/PlistBuddy -c "Print :CFBundleVersion" "$PLIST")
+DMG_PATH="$ROOT/build/${APP_NAME}-${VERSION}.dmg"
+
+echo "Packaging ${APP_NAME} ${VERSION} (${BUILD})..."
+
 echo "Staging DMG contents..."
 rm -rf "$STAGING"
 mkdir -p "$STAGING"
@@ -34,6 +40,7 @@ ln -s /Applications "$STAGING/Applications"
 
 mkdir -p "$ROOT/build"
 rm -f "$DMG_PATH"
+rm -f "$ROOT/build/${APP_NAME}.dmg"
 
 echo "Creating ${DMG_PATH}..."
 hdiutil create \

@@ -20,6 +20,7 @@ final class SoundEngine {
     private var profile: SoundProfile = SoundProfile.standard(for: .default)
     private var samplePools: [KeyCategory: [SamplePool]] = [:]
     private var roundRobinIndexes: [KeyCategory: Int] = [:]
+    private var spatialAudioEnabled = true
 
     private init() {
         setupEngine()
@@ -50,8 +51,7 @@ final class SoundEngine {
                 let playerNodes = (0..<playersPerSample).compactMap { _ -> AVAudioPlayerNode? in
                     let playerNode = AVAudioPlayerNode()
                     engine.attach(playerNode)
-                    engine.connect(playerNode, to: environmentNode, format: buffer.format)
-                    configurePlayerNode(playerNode)
+                    connectPlayerNode(playerNode, format: buffer.format)
                     return playerNode
                 }
 
@@ -76,6 +76,16 @@ final class SoundEngine {
         lock.lock()
         mixerNode.outputVolume = max(0, min(volume, 1))
         lock.unlock()
+    }
+
+    func setSpatialAudioEnabled(_ enabled: Bool) {
+        lock.lock()
+        defer { lock.unlock() }
+
+        guard spatialAudioEnabled != enabled else { return }
+        spatialAudioEnabled = enabled
+        reconnectAllPlayerNodes()
+        applySpatialEnvironmentSettings()
     }
 
     /// Plays a short preview of the active profile's normal key sound.
@@ -125,7 +135,9 @@ final class SoundEngine {
     ) {
         ensureEngineRunning()
 
-        playerNode.position = position
+        if spatialAudioEnabled {
+            playerNode.position = position
+        }
         if playerNode.isPlaying {
             playerNode.stop()
         }
@@ -139,18 +151,52 @@ final class SoundEngine {
         engine.connect(environmentNode, to: mixerNode, format: nil)
         engine.connect(mixerNode, to: engine.outputNode, format: nil)
 
-        environmentNode.listenerPosition = AVAudio3DPoint(x: 0, y: 0, z: 0)
-        environmentNode.listenerAngularOrientation = AVAudio3DAngularOrientation(yaw: 0, pitch: 0, roll: 0)
-        environmentNode.reverbParameters.enable = true
-        environmentNode.reverbBlend = 0.1
-
+        applySpatialEnvironmentSettings()
         ensureEngineRunning()
     }
 
+    private func applySpatialEnvironmentSettings() {
+        environmentNode.listenerPosition = AVAudio3DPoint(x: 0, y: 0, z: 0)
+        environmentNode.listenerAngularOrientation = AVAudio3DAngularOrientation(yaw: 0, pitch: 0, roll: 0)
+        environmentNode.reverbParameters.enable = spatialAudioEnabled
+        environmentNode.reverbBlend = spatialAudioEnabled ? 0.1 : 0
+    }
+
+    private func connectPlayerNode(_ playerNode: AVAudioPlayerNode, format: AVAudioFormat) {
+        let destination: AVAudioNode = spatialAudioEnabled ? environmentNode : mixerNode
+        engine.connect(playerNode, to: destination, format: format)
+        configurePlayerNode(playerNode)
+    }
+
     private func configurePlayerNode(_ playerNode: AVAudioPlayerNode) {
-        playerNode.renderingAlgorithm = .auto
+        guard spatialAudioEnabled else { return }
+
+        playerNode.renderingAlgorithm = .HRTFHQ
         playerNode.sourceMode = .pointSource
         playerNode.pointSourceInHeadMode = .mono
+    }
+
+    private func reconnectAllPlayerNodes() {
+        let wasRunning = engine.isRunning
+        if wasRunning {
+            engine.stop()
+        }
+
+        for pools in samplePools.values {
+            for pool in pools {
+                for playerNode in pool.playerNodes {
+                    if playerNode.isPlaying {
+                        playerNode.stop()
+                    }
+                    engine.disconnectNodeOutput(playerNode)
+                    connectPlayerNode(playerNode, format: pool.buffer.format)
+                }
+            }
+        }
+
+        if wasRunning {
+            ensureEngineRunning()
+        }
     }
 
     private func teardownSamplePools() {

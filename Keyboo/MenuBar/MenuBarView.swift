@@ -4,7 +4,6 @@ import SwiftUI
 struct MenuBarView: View {
     @ObservedObject private var settings = AppSettings.shared
     @ObservedObject private var permissions = PermissionManager.shared
-    @Environment(\.openWindow) private var openWindow
 
     var body: some View {
         Group {
@@ -20,11 +19,7 @@ struct MenuBarView: View {
             Menu {
                 switchPicker
             } label: {
-                Label {
-                    Text(settings.selectedProfile.switchName)
-                } icon: {
-                    Image(nsImage: SwitchSwatchImage.image(for: settings.selectedProfile))
-                }
+                Label("Switches", systemImage: "switch.2")
             }
 
             Menu {
@@ -66,6 +61,14 @@ struct MenuBarView: View {
                 .labelsHidden()
                 .pickerStyle(.inline)
                 .disabled(!permissions.hasInputMonitoringAccess || !settings.enableVisualizer)
+
+                Divider()
+
+                Button {
+                    settings.openSettings(tab: .visualizer)
+                } label: {
+                    Label("Open in Settings…", systemImage: "gearshape")
+                }
             } label: {
                 Label("Visualizer", systemImage: "gauge.with.dots.needle.67percent")
             }
@@ -103,20 +106,25 @@ struct MenuBarView: View {
                 }
 
                 Text(group.brand)
-                    .font(.body)
+                    .font(.caption)
                     .foregroundStyle(.secondary)
+                    .padding(.top, index == 0 ? 0 : 1)
+                    .padding(.bottom, -2)
 
                 ForEach(group.profiles) { profile in
                     Label {
                         Text(profile.switchName)
+                            .font(.callout)
                     } icon: {
                         Image(nsImage: SwitchSwatchImage.image(for: profile))
                     }
+                    .padding(.vertical, -3)
                     .tag(profile)
                 }
             }
         }
         .labelsHidden()
         .pickerStyle(.inline)
+        .controlSize(.small)
     }
 }

@@ -182,6 +182,15 @@ struct SettingsView: View {
             }
         }
 
+        SettingsSection(title: "Spatial Audio") {
+            Toggle("Position keys in 3D space", isOn: $settings.enableSpatialAudio)
+
+            Text("Each key plays from its position on a virtual keyboard using HRTF. Works best with headphones and mono sound samples.")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+
         SettingsSection(title: "Switch Profile") {
             ForEach(SoundProfileID.profilesGroupedByBrand, id: \.brand) { group in
                 VStack(alignment: .leading, spacing: 8) {
@@ -546,7 +555,7 @@ private struct SettingsTabContent<Content: View>: View {
 
 private struct SettingsAppHeader: View {
     private var versionText: String {
-        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
+        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0.0"
         return "Version \(version)"
     }
 

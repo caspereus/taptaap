@@ -42,6 +42,14 @@ final class SettingsServiceCoordinator {
             }
             .store(in: &cancellables)
 
+        settings.$enableSpatialAudio
+            .dropFirst()
+            .sink { enabled in
+                SoundEngine.shared.setSpatialAudioEnabled(enabled)
+                SoundEngine.shared.playPreview()
+            }
+            .store(in: &cancellables)
+
         settings.$enableVisualizer
             .dropFirst()
             .sink { [weak self] _ in
@@ -73,6 +81,7 @@ final class SettingsServiceCoordinator {
 
     private func syncAll() {
         SoundEngine.shared.setOutputVolume(Float(settings.outputVolume))
+        SoundEngine.shared.setSpatialAudioEnabled(settings.enableSpatialAudio)
         SoundEngine.shared.reloadProfile(settings.selectedProfile)
         syncKeyboardMonitor()
         syncVisualizer()
