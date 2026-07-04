@@ -26,6 +26,7 @@ enum SettingsTab: String, CaseIterable, Identifiable {
 
 struct SettingsGlassTabBar: View {
     @Binding var selection: SettingsTab
+    var badgeTabs: Set<SettingsTab> = []
     @Namespace private var selectionNamespace
 
     var body: some View {
@@ -40,6 +41,7 @@ struct SettingsGlassTabBar: View {
 
     private func tabButton(for tab: SettingsTab) -> some View {
         let isSelected = selection == tab
+        let showsBadge = badgeTabs.contains(tab)
 
         return Button {
             withAnimation(.snappy(duration: 0.28)) {
@@ -61,6 +63,14 @@ struct SettingsGlassTabBar: View {
             .padding(.vertical, 10)
             .frame(maxWidth: .infinity)
             .contentShape(Capsule())
+            .overlay(alignment: .topTrailing) {
+                if showsBadge {
+                    Circle()
+                        .fill(Color.orange)
+                        .frame(width: 7, height: 7)
+                        .offset(x: 2, y: -2)
+                }
+            }
         }
         .buttonStyle(.plain)
         .foregroundStyle(isSelected ? Color.primary : Color.secondary)

@@ -21,7 +21,7 @@ struct PermissionOnboardingView: View {
             permissions.refreshAccessStatus()
         }
         .onChange(of: permissions.hasInputMonitoringAccess) { _, granted in
-            if granted {
+            if granted && !InstallLocation.needsRelocation {
                 completeOnboarding()
             }
         }
@@ -49,7 +49,11 @@ struct PermissionOnboardingView: View {
 
     private var content: some View {
         VStack(alignment: .leading, spacing: 20) {
-            permissionCard
+            if InstallLocation.needsRelocation {
+                InstallRelocationCard()
+            } else {
+                permissionCard
+            }
 
             VStack(alignment: .leading, spacing: 8) {
                 Label("Your privacy", systemImage: "lock.shield")
@@ -131,28 +135,36 @@ struct PermissionOnboardingView: View {
 
     private var footer: some View {
         HStack {
-            Button("Skip for Now") {
-                completeOnboarding()
-            }
-            .buttonStyle(.glass)
-            .keyboardShortcut(.cancelAction)
-
-            Spacer()
-
-            if permissions.hasInputMonitoringAccess {
-                Button("Get Started") {
+            if InstallLocation.needsRelocation {
+                Button("Skip for Now") {
                     completeOnboarding()
                 }
-                .keyboardShortcut(.defaultAction)
-                .buttonStyle(.glassProminent)
+                .buttonStyle(.glass)
+                .keyboardShortcut(.cancelAction)
             } else {
-                Button("Open System Settings") {
-                    permissions.requestAccess()
-                    permissions.openInputMonitoringSettings()
+                Button("Skip for Now") {
+                    completeOnboarding()
                 }
-                .keyboardShortcut(.defaultAction)
-                .buttonStyle(.glassProminent)
-                .tint(.accentColor)
+                .buttonStyle(.glass)
+                .keyboardShortcut(.cancelAction)
+
+                Spacer()
+
+                if permissions.hasInputMonitoringAccess {
+                    Button("Get Started") {
+                        completeOnboarding()
+                    }
+                    .keyboardShortcut(.defaultAction)
+                    .buttonStyle(.glassProminent)
+                } else {
+                    Button("Open System Settings") {
+                        permissions.requestAccess()
+                        permissions.openInputMonitoringSettings()
+                    }
+                    .keyboardShortcut(.defaultAction)
+                    .buttonStyle(.glassProminent)
+                    .tint(.accentColor)
+                }
             }
         }
         .padding(20)

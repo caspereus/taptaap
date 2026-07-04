@@ -10,9 +10,20 @@ struct SettingsView: View {
     @State private var previewPressedKeyCodes: Set<CGKeyCode> = []
     @State private var previewCaptureFocused = false
 
+    private var tabBadgeTabs: Set<SettingsTab> {
+        var tabs = Set<SettingsTab>()
+        if InstallLocation.needsRelocation || !permissions.hasInputMonitoringAccess {
+            tabs.insert(.general)
+        }
+        if !permissions.hasInputMonitoringAccess {
+            tabs.insert(.visualizer)
+        }
+        return tabs
+    }
+
     var body: some View {
         VStack(spacing: 0) {
-            SettingsGlassTabBar(selection: $selectedTab)
+            SettingsGlassTabBar(selection: $selectedTab, badgeTabs: tabBadgeTabs)
                 .padding(.horizontal, 20)
                 .padding(.top, 12)
                 .padding(.bottom, 8)
@@ -69,7 +80,25 @@ struct SettingsView: View {
     private var generalTab: some View {
         SettingsAppHeader()
 
-        SettingsSection(title: nil) {
+        if InstallLocation.needsRelocation {
+            InstallRelocationCard(showsManualOption: true)
+        } else if !permissions.hasInputMonitoringAccess {
+            SettingsSetupBanner(permissions: permissions)
+        }
+
+        SettingsSection(title: "General") {
+            Toggle("Enable Taptaap", isOn: $settings.isEnabled)
+                .disabled(!permissions.hasInputMonitoringAccess)
+
+            if !permissions.hasInputMonitoringAccess {
+                Text("Input Monitoring is required to play keyboard sounds.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
+            Divider()
+
             Toggle("Launch at Login", isOn: launchAtLoginBinding)
 
             if let launchAtLoginError {
@@ -88,17 +117,11 @@ struct SettingsView: View {
             )
 
             if !permissions.hasInputMonitoringAccess {
-                HStack(spacing: 12) {
-                    Button("Open System Settings") {
-                        permissions.openInputMonitoringSettings()
-                    }
-                    .buttonStyle(.glass)
-
-                    Button("Request Permission") {
-                        permissions.requestAccess()
-                    }
-                    .buttonStyle(.glass)
+                Button("Open System Settings") {
+                    permissions.requestAccess()
+                    permissions.openInputMonitoringSettings()
                 }
+                .buttonStyle(.glassProminent)
                 .padding(.top, 4)
             }
         }
@@ -106,10 +129,14 @@ struct SettingsView: View {
         SettingsSection(title: "Install Location") {
             SettingsValueRow(title: "Current Folder", value: InstallLocation.displayLabel)
 
-            Text(InstallLocation.installHint)
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
+            if InstallLocation.needsRelocation {
+                InstallRelocationCard(showsManualOption: true, embedded: true)
+            } else {
+                Text(InstallLocation.installHint)
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
         }
 
         SettingsSection(title: "Quick Hotkeys") {
@@ -186,10 +213,38 @@ struct SettingsView: View {
 
     @ViewBuilder
     private var visualizerTab: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text("Preview")
-                .font(.body.weight(.semibold))
+        SettingsSection(title: "Display") {
+            Toggle("Show While Typing", isOn: $settings.enableVisualizer)
+                .disabled(!permissions.hasInputMonitoringAccess)
 
+            if !permissions.hasInputMonitoringAccess {
+                Text("Input Monitoring permission is required to show the typing visualizer.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            } else if !settings.enableVisualizer {
+                Text("Turn this on to show a keyboard overlay while you type.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+
+        SettingsSection(title: "Position") {
+            VisualizerPositionPicker(
+                selection: $settings.visualizerPosition,
+                isEnabled: visualizerControlsEnabled
+            )
+        }
+
+        SettingsSection(title: "Theme") {
+            VisualizerThemePicker(
+                selection: $settings.visualizerTheme,
+                isEnabled: visualizerControlsEnabled
+            )
+        }
+
+        SettingsSection(title: "Preview") {
             KeyboardVisualizerView(
                 pressedKeyCodes: previewPressedKeyCodes,
                 theme: settings.visualizerTheme
@@ -208,42 +263,10 @@ struct SettingsView: View {
             )
             .frame(height: 44)
 
-            Text("Only captures keys while focused. Click the box and type to test.")
+            Text("Click the box below and type to preview themes before enabling the overlay.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
-        }
-
-        VStack(alignment: .leading, spacing: 6) {
-            Toggle("Show While Typing", isOn: $settings.enableVisualizer)
-                .font(.body)
-                .disabled(!permissions.hasInputMonitoringAccess)
-
-            if !permissions.hasInputMonitoringAccess {
-                Text("Input Monitoring permission is required to show the typing visualizer.")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-        }
-
-        VStack(alignment: .leading, spacing: 10) {
-            Text("Position")
-                .font(.body.weight(.semibold))
-
-            VisualizerPositionPicker(
-                selection: $settings.visualizerPosition,
-                isEnabled: visualizerControlsEnabled
-            )
-        }
-
-        VStack(alignment: .leading, spacing: 10) {
-            Text("Theme")
-                .font(.body.weight(.semibold))
-
-            VisualizerThemePicker(
-                selection: $settings.visualizerTheme,
-                isEnabled: visualizerControlsEnabled
-            )
+                .fixedSize(horizontal: false, vertical: true)
         }
     }
 
@@ -438,6 +461,71 @@ private final class VisualizerPreviewKeyCaptureNSView: NSView {
 }
 
 // MARK: - Components
+
+private struct SettingsSetupBanner: View {
+    @ObservedObject var permissions: PermissionManager
+
+    var body: some View {
+        GlassCard {
+            HStack {
+                Label("Setup Required", systemImage: "exclamationmark.triangle.fill")
+                    .font(.headline)
+                    .foregroundStyle(.orange)
+
+                Spacer()
+
+                Text("Required")
+                    .font(.caption.weight(.medium))
+                    .foregroundStyle(.orange)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 3)
+                    .background(.orange.opacity(0.15), in: Capsule())
+            }
+
+            Text("Taptaap needs Input Monitoring to detect key presses and play switch sounds.")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+
+            if permissions.hasAccessibilityOnly {
+                Text("Accessibility is enabled, but Taptaap needs Input Monitoring — a separate permission.")
+                    .font(.caption)
+                    .foregroundStyle(.orange)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
+            VStack(alignment: .leading, spacing: 6) {
+                setupStep(number: 1, text: "Click \"Open System Settings\" below")
+                setupStep(number: 2, text: "Enable Taptaap under Privacy & Security → Input Monitoring")
+                setupStep(number: 3, text: "Return here — status updates automatically")
+            }
+            .padding(.top, 2)
+
+            Button("Open System Settings") {
+                permissions.requestAccess()
+                permissions.openInputMonitoringSettings()
+            }
+            .buttonStyle(.glassProminent)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.top, 4)
+        }
+    }
+
+    private func setupStep(number: Int, text: String) -> some View {
+        HStack(alignment: .top, spacing: 10) {
+            Text("\(number)")
+                .font(.caption2.weight(.bold))
+                .foregroundStyle(.secondary)
+                .frame(width: 18, height: 18)
+                .background(.quaternary, in: Circle())
+
+            Text(text)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+    }
+}
 
 private struct SettingsTabContent<Content: View>: View {
     @ViewBuilder let content: Content
