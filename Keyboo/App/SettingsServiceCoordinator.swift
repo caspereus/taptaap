@@ -7,7 +7,6 @@ final class SettingsServiceCoordinator {
 
     private let settings = AppSettings.shared
     private let permissions = PermissionManager.shared
-    private let accessibility = AccessibilityPermissionManager.shared
     private var cancellables = Set<AnyCancellable>()
 
     private init() {
@@ -16,7 +15,6 @@ final class SettingsServiceCoordinator {
 
     func start() {
         permissions.refreshAccessStatus()
-        accessibility.refreshAccessStatus()
         syncAll()
     }
 
@@ -65,59 +63,10 @@ final class SettingsServiceCoordinator {
             }
             .store(in: &cancellables)
 
-        settings.$enableKeyboardOverlay
-            .dropFirst()
-            .sink { [weak self] _ in
-                self?.syncKeyboardOverlay()
-            }
-            .store(in: &cancellables)
-
-        settings.$overlayShowMode
-            .dropFirst()
-            .sink { [weak self] _ in
-                self?.syncKeyboardOverlayConfiguration()
-            }
-            .store(in: &cancellables)
-
-        settings.$overlayPrivacyMode
-            .dropFirst()
-            .sink { [weak self] _ in
-                self?.syncKeyboardOverlayConfiguration()
-            }
-            .store(in: &cancellables)
-
-        settings.$overlayPosition
-            .dropFirst()
-            .sink { [weak self] _ in
-                self?.syncKeyboardOverlayConfiguration()
-            }
-            .store(in: &cancellables)
-
-        settings.$overlayHideDelay
-            .dropFirst()
-            .sink { [weak self] _ in
-                self?.syncKeyboardOverlayConfiguration()
-            }
-            .store(in: &cancellables)
-
-        settings.$overlayTheme
-            .dropFirst()
-            .sink { [weak self] _ in
-                self?.syncKeyboardOverlayConfiguration()
-            }
-            .store(in: &cancellables)
-
         permissions.$hasInputMonitoringAccess
             .dropFirst()
             .sink { [weak self] _ in
                 self?.syncAll()
-            }
-            .store(in: &cancellables)
-
-        accessibility.$hasAccessibilityAccess
-            .dropFirst()
-            .sink { [weak self] _ in
-                self?.syncKeyboardOverlay()
             }
             .store(in: &cancellables)
     }
@@ -127,7 +76,6 @@ final class SettingsServiceCoordinator {
         SoundEngine.shared.reloadProfile(settings.selectedProfile)
         syncKeyboardMonitor()
         syncVisualizer()
-        syncKeyboardOverlay()
     }
 
     private func syncVisualizer() {
@@ -150,27 +98,5 @@ final class SettingsServiceCoordinator {
         } else {
             KeyboardEventMonitor.shared.stop()
         }
-    }
-
-    private func syncKeyboardOverlay() {
-        let active = settings.enableKeyboardOverlay && accessibility.hasAccessibilityAccess
-        KeyboardOverlayManager.shared.setActive(
-            active,
-            showMode: settings.overlayShowMode,
-            privacyMode: settings.overlayPrivacyMode,
-            position: settings.overlayPosition,
-            hideDelay: settings.overlayHideDelay,
-            theme: settings.overlayTheme
-        )
-    }
-
-    private func syncKeyboardOverlayConfiguration() {
-        KeyboardOverlayManager.shared.updateConfiguration(
-            showMode: settings.overlayShowMode,
-            privacyMode: settings.overlayPrivacyMode,
-            position: settings.overlayPosition,
-            hideDelay: settings.overlayHideDelay,
-            theme: settings.overlayTheme
-        )
     }
 }

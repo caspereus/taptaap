@@ -161,10 +161,4 @@ enum KeyCodeMapper {
         }
     }
 
-    static func countsTowardTypingSpeed(for keyCode: CGKeyCode) -> Bool {
-        switch category(for: keyCode) {
-        case .normal, .space: true
-        default: false
-        }
-    }
 }

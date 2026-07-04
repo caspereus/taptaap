@@ -4,7 +4,6 @@ enum SettingsTab: String, CaseIterable, Identifiable {
     case general
     case sound
     case visualizer
-    case overlay
 
     var id: String { rawValue }
 
@@ -13,7 +12,6 @@ enum SettingsTab: String, CaseIterable, Identifiable {
         case .general: "General"
         case .sound: "Sound"
         case .visualizer: "Visualizer"
-        case .overlay: "Overlay"
         }
     }
 
@@ -22,7 +20,6 @@ enum SettingsTab: String, CaseIterable, Identifiable {
         case .general: "gearshape"
         case .sound: "speaker.wave.2"
         case .visualizer: "gauge.with.dots.needle.67percent"
-        case .overlay: "rectangle.on.rectangle"
         }
     }
 }

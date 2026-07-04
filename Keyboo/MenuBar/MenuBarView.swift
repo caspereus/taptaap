@@ -4,7 +4,6 @@ import SwiftUI
 struct MenuBarView: View {
     @ObservedObject private var settings = AppSettings.shared
     @ObservedObject private var permissions = PermissionManager.shared
-    @ObservedObject private var accessibility = AccessibilityPermissionManager.shared
     @Environment(\.openWindow) private var openWindow
 
     var body: some View {
@@ -63,12 +62,6 @@ struct MenuBarView: View {
                 Label("Sound", systemImage: "speaker.wave.2")
             }
 
-            Button {
-                settings.openSettings(tab: .overlay)
-            } label: {
-                Label("Keyboard Overlay", systemImage: "rectangle.on.rectangle")
-            }
-
             Divider()
 
             SettingsLink {
@@ -84,7 +77,6 @@ struct MenuBarView: View {
         }
         .onAppear {
             permissions.refreshAccessStatus()
-            accessibility.refreshAccessStatus()
         }
     }
 

@@ -8,6 +8,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         Task { @MainActor in
             SettingsServiceCoordinator.shared.start()
+            GlobalHotkeyManager.shared.register()
+        }
+    }
+
+    func applicationWillTerminate(_ notification: Notification) {
+        Task { @MainActor in
+            GlobalHotkeyManager.shared.unregister()
         }
     }
 

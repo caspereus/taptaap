@@ -16,12 +16,6 @@ final class AppSettings: ObservableObject {
         static let visualizerTheme = "keyboo.visualizerTheme"
         static let hasCompletedPermissionOnboarding = "keyboo.hasCompletedPermissionOnboarding"
         static let outputVolume = "keyboo.outputVolume"
-        static let enableKeyboardOverlay = "keyboo.enableKeyboardOverlay"
-        static let overlayShowMode = "keyboo.overlayShowMode"
-        static let overlayPosition = "keyboo.overlayPosition"
-        static let overlayHideDelay = "keyboo.overlayHideDelay"
-        static let overlayPrivacyMode = "keyboo.overlayPrivacyMode"
-        static let overlayTheme = "keyboo.overlayTheme"
     }
 
     @Published var isEnabled: Bool {
@@ -63,38 +57,17 @@ final class AppSettings: ObservableObject {
         didSet { UserDefaults.standard.set(hasCompletedPermissionOnboarding, forKey: Keys.hasCompletedPermissionOnboarding) }
     }
 
-    @Published var enableKeyboardOverlay: Bool {
-        didSet { UserDefaults.standard.set(enableKeyboardOverlay, forKey: Keys.enableKeyboardOverlay) }
-    }
-
-    @Published var overlayShowMode: OverlayShowMode {
-        didSet { UserDefaults.standard.set(overlayShowMode.rawValue, forKey: Keys.overlayShowMode) }
-    }
-
-    @Published var overlayPosition: OverlayPosition {
-        didSet { UserDefaults.standard.set(overlayPosition.rawValue, forKey: Keys.overlayPosition) }
-    }
-
-    @Published var overlayHideDelay: Double {
-        didSet {
-            let clamped = min(max(overlayHideDelay, 0.5), 3.0)
-            if clamped != overlayHideDelay {
-                overlayHideDelay = clamped
-                return
-            }
-            UserDefaults.standard.set(overlayHideDelay, forKey: Keys.overlayHideDelay)
-        }
-    }
-
-    @Published var overlayPrivacyMode: Bool {
-        didSet { UserDefaults.standard.set(overlayPrivacyMode, forKey: Keys.overlayPrivacyMode) }
-    }
-
-    @Published var overlayTheme: OverlayTheme {
-        didSet { UserDefaults.standard.set(overlayTheme.rawValue, forKey: Keys.overlayTheme) }
-    }
-
     @Published var requestedSettingsTab: SettingsTab?
+
+    func cycleToNextProfile() {
+        let profiles = SoundProfileID.allCases
+        guard let index = profiles.firstIndex(of: selectedProfile) else {
+            selectedProfile = profiles.first ?? .default
+            return
+        }
+        let nextIndex = (index + 1) % profiles.count
+        selectedProfile = profiles[nextIndex]
+    }
 
     func openSettings(tab: SettingsTab? = nil) {
         requestedSettingsTab = tab
@@ -125,18 +98,5 @@ final class AppSettings: ObservableObject {
         ) ?? .arctic
 
         hasCompletedPermissionOnboarding = defaults.bool(forKey: Keys.hasCompletedPermissionOnboarding)
-
-        enableKeyboardOverlay = defaults.object(forKey: Keys.enableKeyboardOverlay) as? Bool ?? false
-        overlayShowMode = OverlayShowMode(
-            rawValue: defaults.string(forKey: Keys.overlayShowMode) ?? OverlayShowMode.shortcutsOnly.rawValue
-        ) ?? .shortcutsOnly
-        overlayPosition = OverlayPosition(
-            rawValue: defaults.string(forKey: Keys.overlayPosition) ?? OverlayPosition.bottomCenter.rawValue
-        ) ?? .bottomCenter
-        overlayHideDelay = defaults.object(forKey: Keys.overlayHideDelay) as? Double ?? 1.0
-        overlayPrivacyMode = defaults.object(forKey: Keys.overlayPrivacyMode) as? Bool ?? false
-        overlayTheme = OverlayTheme(
-            rawValue: defaults.string(forKey: Keys.overlayTheme) ?? OverlayTheme.graphite.rawValue
-        ) ?? .graphite
     }
 }

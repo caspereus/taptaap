@@ -5,13 +5,10 @@ import SwiftUI
 struct SettingsView: View {
     @ObservedObject private var settings = AppSettings.shared
     @ObservedObject private var permissions = PermissionManager.shared
-    @ObservedObject private var accessibility = AccessibilityPermissionManager.shared
     @State private var selectedTab: SettingsTab = .general
     @State private var launchAtLoginError: String?
     @State private var previewPressedKeyCodes: Set<CGKeyCode> = []
     @State private var previewCaptureFocused = false
-    @State private var overlayPreviewKeycaps: [String] = ["⌘", "⇧", "P"]
-    @State private var overlayPreviewCaptureFocused = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -45,7 +42,6 @@ struct SettingsView: View {
 
     private func refreshSettingsState() {
         permissions.refreshAccessStatus()
-        accessibility.refreshAccessStatus()
         syncLaunchAtLoginFromSystem()
     }
 
@@ -64,8 +60,6 @@ struct SettingsView: View {
             SettingsTabContent { soundTab }
         case .visualizer:
             SettingsTabContent { visualizerTab }
-        case .overlay:
-            SettingsTabContent { overlayTab }
         }
     }
 
@@ -106,9 +100,6 @@ struct SettingsView: View {
                     .buttonStyle(.glass)
                 }
                 .padding(.top, 4)
-
-                PermissionXcodeDevNote()
-                    .padding(.top, 4)
             }
         }
 
@@ -116,6 +107,26 @@ struct SettingsView: View {
             SettingsValueRow(title: "Current Folder", value: InstallLocation.displayLabel)
 
             Text(InstallLocation.installHint)
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+
+        SettingsSection(title: "Quick Hotkeys") {
+            VStack(alignment: .leading, spacing: 2) {
+                QuickHotkeyRow(
+                    icon: "power",
+                    title: "Toggle Taptaap",
+                    shortcut: "Control + Option + Command + E"
+                )
+                QuickHotkeyRow(
+                    icon: "speaker.wave.2",
+                    title: "Next Sound Profile",
+                    shortcut: "Control + Option + Command + Right Arrow"
+                )
+            }
+
+            Text("Hotkey customization can be added in a later version.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
@@ -233,135 +244,6 @@ struct SettingsView: View {
                 selection: $settings.visualizerTheme,
                 isEnabled: visualizerControlsEnabled
             )
-        }
-    }
-
-    // MARK: - Keyboard Overlay
-
-    private var overlayControlsEnabled: Bool {
-        accessibility.hasAccessibilityAccess && settings.enableKeyboardOverlay
-    }
-
-    @ViewBuilder
-    private var overlayTab: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text("Preview")
-                .font(.body.weight(.semibold))
-
-            KeyboardOverlayView(
-                keycaps: overlayPreviewKeycaps,
-                theme: settings.overlayTheme
-            )
-                .frame(maxWidth: .infinity, alignment: .center)
-                .padding(.vertical, 4)
-
-            VisualizerPreviewKeyCaptureView(
-                isFocused: $overlayPreviewCaptureFocused,
-                onKeyDown: { keyCode, modifierFlags in
-                    let labels = KeyFormatter.keycapLabels(
-                        keyCode: UInt16(keyCode),
-                        modifierFlags: modifierFlags
-                    )
-                    if !labels.isEmpty {
-                        overlayPreviewKeycaps = labels
-                    }
-                },
-                onKeyUp: { _, _ in }
-            )
-            .frame(height: 44)
-
-            Text("Only captures keys while focused. Click the box and type to test.")
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-        }
-
-        VStack(alignment: .leading, spacing: 6) {
-            Toggle("Enable Keyboard Overlay", isOn: $settings.enableKeyboardOverlay)
-                .font(.body)
-                .disabled(!accessibility.hasAccessibilityAccess)
-
-            if !accessibility.hasAccessibilityAccess {
-                Text("Enable Accessibility permission to show keyboard overlay.")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
-
-                HStack(spacing: 12) {
-                    Button("Open System Settings") {
-                        accessibility.openAccessibilitySettings()
-                    }
-                    .buttonStyle(.glass)
-
-                    Button("Request Permission") {
-                        accessibility.requestAccess()
-                    }
-                    .buttonStyle(.glass)
-                }
-                .padding(.top, 4)
-            }
-        }
-
-        VStack(alignment: .leading, spacing: 10) {
-            Text("Show Mode")
-                .font(.body.weight(.semibold))
-
-            Picker("Show Mode", selection: $settings.overlayShowMode) {
-                ForEach(OverlayShowMode.allCases) { mode in
-                    Text(mode.displayName).tag(mode)
-                }
-            }
-            .pickerStyle(.segmented)
-            .disabled(!accessibility.hasAccessibilityAccess)
-        }
-
-        Toggle("Privacy Mode", isOn: $settings.overlayPrivacyMode)
-            .disabled(!accessibility.hasAccessibilityAccess)
-
-        Text("Hide normal letters unless a modifier key is held.")
-            .font(.footnote)
-            .foregroundStyle(.secondary)
-            .fixedSize(horizontal: false, vertical: true)
-
-        VStack(alignment: .leading, spacing: 10) {
-            Text("Position")
-                .font(.body.weight(.semibold))
-
-            OverlayPositionPicker(
-                selection: $settings.overlayPosition,
-                isEnabled: overlayControlsEnabled
-            )
-        }
-
-        VStack(alignment: .leading, spacing: 10) {
-            Text("Theme")
-                .font(.body.weight(.semibold))
-
-            OverlayThemePicker(
-                selection: $settings.overlayTheme,
-                isEnabled: true
-            )
-        }
-
-        VStack(alignment: .leading, spacing: 10) {
-            HStack {
-                Text("Hide Delay")
-                    .font(.body.weight(.semibold))
-                Spacer()
-                Text(String(format: "%.1fs", settings.overlayHideDelay))
-                    .font(.subheadline.monospacedDigit())
-                    .foregroundStyle(.secondary)
-            }
-
-            Slider(value: $settings.overlayHideDelay, in: 0.5 ... 3, step: 0.1)
-                .disabled(!accessibility.hasAccessibilityAccess)
-        }
-
-        SettingsSection(title: "Privacy") {
-            Text("Key presses are shown on screen only and are never stored, logged, or transmitted.")
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-                .lineSpacing(2)
-                .fixedSize(horizontal: false, vertical: true)
         }
     }
 
@@ -655,6 +537,35 @@ private struct SettingsValueRow: View {
             Text(value)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
+        }
+    }
+}
+
+private struct QuickHotkeyRow: View {
+    let icon: String
+    let title: String
+    let shortcut: String
+
+    var body: some View {
+        HStack(spacing: 10) {
+            Image(systemName: icon)
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(.secondary)
+                .frame(width: 18)
+
+            Text(title)
+                .font(.body)
+
+            Spacer(minLength: 8)
+
+            Text(shortcut)
+                .font(.footnote.monospaced())
+                .foregroundStyle(.secondary)
+        }
+        .padding(.vertical, 6)
+        .overlay(alignment: .bottom) {
+            Divider()
+                .opacity(0.45)
         }
     }
 }

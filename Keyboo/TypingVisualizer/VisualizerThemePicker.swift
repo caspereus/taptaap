@@ -12,8 +12,8 @@ struct VisualizerThemePicker: View {
                 themeButton(theme)
             }
         }
+        .disabled(!isEnabled)
         .opacity(isEnabled ? 1 : 0.45)
-        .allowsHitTesting(isEnabled)
     }
 
     private func themeButton(_ theme: VisualizerTheme) -> some View {

@@ -89,8 +89,6 @@ struct PermissionOnboardingView: View {
                             .fixedSize(horizontal: false, vertical: true)
                     }
 
-                    PermissionXcodeDevNote()
-
                     onboardingStep(number: 1, text: "Click \"Open System Settings\" below")
                     onboardingStep(number: 2, text: "Enable Taptaap under Privacy & Security → Input Monitoring")
                     onboardingStep(number: 3, text: "Return here — Taptaap will start automatically")
