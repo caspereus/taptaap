@@ -21,6 +21,7 @@ final class SoundEngine {
     private var samplePools: [KeyCategory: [SamplePool]] = [:]
     private var roundRobinIndexes: [KeyCategory: Int] = [:]
     private var spatialAudioEnabled = true
+    private var playbackEnabled = true
 
     private init() {
         setupEngine()
@@ -78,6 +79,12 @@ final class SoundEngine {
         lock.unlock()
     }
 
+    func setPlaybackEnabled(_ enabled: Bool) {
+        lock.lock()
+        playbackEnabled = enabled
+        lock.unlock()
+    }
+
     func setSpatialAudioEnabled(_ enabled: Bool) {
         lock.lock()
         defer { lock.unlock() }
@@ -106,6 +113,13 @@ final class SoundEngine {
 
     /// Called directly from the CGEventTap callback for minimum latency.
     func play(keyCode: CGKeyCode) {
+        lock.lock()
+        guard playbackEnabled else {
+            lock.unlock()
+            return
+        }
+        lock.unlock()
+
         let category = KeyCodeMapper.category(for: keyCode)
         let position = KeyCodeMapper.spatialPosition(for: keyCode)
 

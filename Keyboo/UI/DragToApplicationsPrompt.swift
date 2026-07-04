@@ -10,7 +10,15 @@ struct DragToApplicationsPrompt: View {
     var style: Style = .full
 
     private var iconSize: CGFloat {
-        style == .full ? 64 : 44
+        style == .full ? 88 : 56
+    }
+
+    private var containerMaxWidth: CGFloat {
+        style == .full ? 292 : 248
+    }
+
+    private var iconRowSpacing: CGFloat {
+        style == .full ? 14 : 10
     }
 
     private var appIcon: NSImage {
@@ -22,26 +30,29 @@ struct DragToApplicationsPrompt: View {
     }
 
     var body: some View {
-        VStack(spacing: style == .full ? 10 : 8) {
-            HStack(spacing: style == .full ? 20 : 14) {
+        VStack(spacing: style == .full ? 12 : 8) {
+            HStack(spacing: iconRowSpacing) {
                 installTarget(icon: appIcon, label: "Taptaap")
 
                 dragArrow
 
                 installTarget(icon: applicationsIcon, label: "Applications")
             }
-            .frame(maxWidth: .infinity)
 
             Text("Drag Taptaap to the Applications folder")
                 .font(style == .full ? .subheadline.weight(.medium) : .footnote.weight(.medium))
                 .multilineTextAlignment(.center)
                 .foregroundStyle(.primary)
+                .fixedSize(horizontal: false, vertical: true)
         }
-        .padding(.vertical, style == .full ? 8 : 4)
+        .padding(.horizontal, style == .full ? 18 : 14)
+        .padding(.vertical, style == .full ? 16 : 12)
+        .frame(maxWidth: containerMaxWidth)
+        .frame(maxWidth: .infinity)
     }
 
     private func installTarget(icon: NSImage, label: String) -> some View {
-        VStack(spacing: 6) {
+        VStack(spacing: 8) {
             Image(nsImage: icon)
                 .resizable()
                 .interpolation(.high)
@@ -51,13 +62,14 @@ struct DragToApplicationsPrompt: View {
                 .font(style == .full ? .caption : .caption2)
                 .foregroundStyle(.secondary)
                 .lineLimit(1)
+                .minimumScaleFactor(0.85)
         }
-        .frame(minWidth: iconSize + 8)
+        .frame(width: iconSize)
     }
 
     private var dragArrow: some View {
         Image(systemName: "arrow.right")
-            .font(style == .full ? .title2.weight(.semibold) : .body.weight(.semibold))
+            .font(style == .full ? .title.weight(.semibold) : .headline.weight(.semibold))
             .foregroundStyle(.tertiary)
             .symbolEffect(.pulse, options: .repeating)
             .accessibilityHidden(true)

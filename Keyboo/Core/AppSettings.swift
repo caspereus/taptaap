@@ -10,6 +10,7 @@ final class AppSettings: ObservableObject {
         static let isEnabled = "keyboo.isEnabled"
         static let selectedProfile = "keyboo.selectedProfile"
         static let launchAtLogin = "keyboo.launchAtLogin"
+        static let enableSound = "keyboo.enableSound"
         static let enableVisualizer = "keyboo.enableVisualizer"
         static let visualizerPosition = "keyboo.visualizerPosition"
         static let legacyMenuBarPosition = "keyboo.menuBarPosition"
@@ -44,6 +45,10 @@ final class AppSettings: ObservableObject {
 
     @Published var enableSpatialAudio: Bool {
         didSet { UserDefaults.standard.set(enableSpatialAudio, forKey: Keys.enableSpatialAudio) }
+    }
+
+    @Published var enableSound: Bool {
+        didSet { UserDefaults.standard.set(enableSound, forKey: Keys.enableSound) }
     }
 
     @Published var enableVisualizer: Bool {
@@ -89,6 +94,7 @@ final class AppSettings: ObservableObject {
         let storedVolume = defaults.object(forKey: Keys.outputVolume) as? Double ?? 1.0
         outputVolume = min(max(storedVolume, 0), 1)
         enableSpatialAudio = defaults.object(forKey: Keys.enableSpatialAudio) as? Bool ?? true
+        enableSound = defaults.object(forKey: Keys.enableSound) as? Bool ?? true
         enableVisualizer = defaults.object(forKey: Keys.enableVisualizer) as? Bool ?? false
 
         if let storedPosition = defaults.string(forKey: Keys.visualizerPosition) {

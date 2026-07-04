@@ -37,6 +37,7 @@ struct InstallRelocationCard: View {
             }
 
             DragToApplicationsPrompt(style: embedded ? .compact : .full)
+                .frame(maxWidth: .infinity)
 
             if embedded {
                 Text("Taptaap is running from \"\(InstallLocation.displayLabel)\". Drag it to Applications before granting Input Monitoring.")

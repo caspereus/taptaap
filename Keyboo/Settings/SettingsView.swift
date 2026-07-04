@@ -16,6 +16,7 @@ struct SettingsView: View {
             tabs.insert(.general)
         }
         if !permissions.hasInputMonitoringAccess {
+            tabs.insert(.sound)
             tabs.insert(.visualizer)
         }
         return tabs
@@ -91,10 +92,47 @@ struct SettingsView: View {
                 .disabled(!permissions.hasInputMonitoringAccess)
 
             if !permissions.hasInputMonitoringAccess {
-                Text("Input Monitoring is required to play keyboard sounds.")
+                Text("Input Monitoring is required to play keyboard sounds and show the visualizer.")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
+            } else if settings.isEnabled {
+                Text("Pauses everything at once. Use the feature toggles below to turn off sound or the visualizer individually.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            } else {
+                Text("Taptaap is paused. Turn this on to resume your selected features.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+
+            Divider()
+
+            Toggle("Keyboard Sounds", isOn: $settings.enableSound)
+                .disabled(!permissions.hasInputMonitoringAccess)
+
+            Toggle("Typing Visualizer", isOn: $settings.enableVisualizer)
+                .disabled(!permissions.hasInputMonitoringAccess)
+
+            if permissions.hasInputMonitoringAccess && settings.isEnabled {
+                if !settings.enableSound && !settings.enableVisualizer {
+                    Text("Both features are off — Taptaap is not listening for key presses.")
+                        .font(.footnote)
+                        .foregroundStyle(.orange)
+                        .fixedSize(horizontal: false, vertical: true)
+                } else if !settings.enableSound {
+                    Text("Keyboard sounds are off. The visualizer can still run.")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                } else if !settings.enableVisualizer {
+                    Text("Visualizer is off. Keyboard sounds can still play.")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
             }
 
             Divider()
@@ -170,26 +208,52 @@ struct SettingsView: View {
 
     // MARK: - Sound
 
+    private var soundControlsEnabled: Bool {
+        permissions.hasInputMonitoringAccess && settings.enableSound
+    }
+
     @ViewBuilder
     private var soundTab: some View {
+        SettingsSection(title: "Keyboard Sounds") {
+            Toggle("Enabled", isOn: $settings.enableSound)
+                .disabled(!permissions.hasInputMonitoringAccess)
+
+            if !permissions.hasInputMonitoringAccess {
+                Text("Input Monitoring permission is required to play keyboard sounds.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            } else if !settings.enableSound {
+                Text("Off — no switch sounds while typing. Turn on in General or here.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+
         SettingsSection(title: "Volume") {
             HStack {
                 Slider(value: $settings.outputVolume, in: 0 ... 1)
+                    .disabled(!soundControlsEnabled)
                 Text("\(Int(settings.outputVolume * 100))%")
                     .font(.subheadline.monospacedDigit().weight(.medium))
                     .foregroundStyle(.secondary)
                     .frame(width: 44, alignment: .trailing)
             }
+            .opacity(soundControlsEnabled ? 1 : 0.45)
         }
 
         SettingsSection(title: "Spatial Audio") {
             Toggle("Position keys in 3D space", isOn: $settings.enableSpatialAudio)
+                .disabled(!soundControlsEnabled)
 
             Text("Each key plays from its position on a virtual keyboard using HRTF. Works best with headphones and mono sound samples.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
         }
+        .opacity(soundControlsEnabled ? 1 : 0.45)
+        .allowsHitTesting(soundControlsEnabled)
 
         SettingsSection(title: "Switch Profile") {
             ForEach(SoundProfileID.profilesGroupedByBrand, id: \.brand) { group in
@@ -222,8 +286,8 @@ struct SettingsView: View {
 
     @ViewBuilder
     private var visualizerTab: some View {
-        SettingsSection(title: "Display") {
-            Toggle("Show While Typing", isOn: $settings.enableVisualizer)
+        SettingsSection(title: "Typing Visualizer") {
+            Toggle("Enabled", isOn: $settings.enableVisualizer)
                 .disabled(!permissions.hasInputMonitoringAccess)
 
             if !permissions.hasInputMonitoringAccess {
@@ -232,7 +296,7 @@ struct SettingsView: View {
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             } else if !settings.enableVisualizer {
-                Text("Turn this on to show a keyboard overlay while you type.")
+                Text("Off — no keyboard overlay while typing. Turn on in General or here.")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)

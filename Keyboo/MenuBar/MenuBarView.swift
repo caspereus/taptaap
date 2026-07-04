@@ -22,9 +22,15 @@ struct MenuBarView: View {
                 Label("Switches", systemImage: "switch.2")
             }
 
+            Button {
+                settings.openSettings(tab: .sound)
+            } label: {
+                Label("Sound", systemImage: "speaker.wave.2")
+            }
+
             Menu {
                 Toggle(isOn: $settings.enableVisualizer) {
-                    Label("Show While Typing", systemImage: "eye")
+                    Label("Typing Visualizer", systemImage: "eye")
                 }
                 .disabled(!permissions.hasInputMonitoringAccess)
 
@@ -71,12 +77,6 @@ struct MenuBarView: View {
                 }
             } label: {
                 Label("Visualizer", systemImage: "gauge.with.dots.needle.67percent")
-            }
-
-            Button {
-                settings.openSettings(tab: .sound)
-            } label: {
-                Label("Sound", systemImage: "speaker.wave.2")
             }
 
             Divider()

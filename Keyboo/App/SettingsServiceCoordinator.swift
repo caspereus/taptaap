@@ -27,6 +27,14 @@ final class SettingsServiceCoordinator {
             }
             .store(in: &cancellables)
 
+        settings.$enableSound
+            .dropFirst()
+            .sink { [weak self] _ in
+                self?.syncSound()
+                self?.syncKeyboardMonitor()
+            }
+            .store(in: &cancellables)
+
         settings.$selectedProfile
             .dropFirst()
             .sink { profile in
@@ -54,6 +62,7 @@ final class SettingsServiceCoordinator {
             .dropFirst()
             .sink { [weak self] _ in
                 self?.syncVisualizer()
+                self?.syncKeyboardMonitor()
             }
             .store(in: &cancellables)
 
@@ -80,11 +89,20 @@ final class SettingsServiceCoordinator {
     }
 
     private func syncAll() {
+        syncSound()
         SoundEngine.shared.setOutputVolume(Float(settings.outputVolume))
         SoundEngine.shared.setSpatialAudioEnabled(settings.enableSpatialAudio)
         SoundEngine.shared.reloadProfile(settings.selectedProfile)
         syncKeyboardMonitor()
         syncVisualizer()
+    }
+
+    private func syncSound() {
+        SoundEngine.shared.setPlaybackEnabled(
+            settings.isEnabled
+                && settings.enableSound
+                && permissions.hasInputMonitoringAccess
+        )
     }
 
     private func syncVisualizer() {
@@ -99,7 +117,9 @@ final class SettingsServiceCoordinator {
     }
 
     private func syncKeyboardMonitor() {
-        let active = settings.isEnabled && permissions.hasInputMonitoringAccess
+        let active = settings.isEnabled
+            && permissions.hasInputMonitoringAccess
+            && (settings.enableSound || settings.enableVisualizer)
         KeyboardEventMonitor.shared.setMonitoringActive(active)
 
         if active {
