@@ -39,7 +39,7 @@ struct VisualizerThemePicker: View {
     }
 }
 
-private struct VisualizerThemeSwatch: View {
+struct VisualizerThemeSwatch: View {
     let theme: VisualizerTheme
     let isSelected: Bool
 

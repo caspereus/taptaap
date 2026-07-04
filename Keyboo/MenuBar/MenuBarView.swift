@@ -37,7 +37,14 @@ struct MenuBarView: View {
 
                 Picker("Position", selection: $settings.visualizerPosition) {
                     ForEach(VisualizerPosition.allCases) { position in
-                        Text(position.displayName).tag(position)
+                        Label {
+                            Text(position.displayName)
+                                .font(.callout)
+                        } icon: {
+                            Image(nsImage: VisualizerPositionImage.image(for: position))
+                        }
+                        .padding(.vertical, -3)
+                        .tag(position)
                     }
                 }
                 .labelsHidden()
@@ -46,7 +53,14 @@ struct MenuBarView: View {
 
                 Picker("Theme", selection: $settings.visualizerTheme) {
                     ForEach(VisualizerTheme.allCases) { theme in
-                        Text(theme.displayName).tag(theme)
+                        Label {
+                            Text(theme.displayName)
+                                .font(.callout)
+                        } icon: {
+                            Image(nsImage: VisualizerThemeImage.image(for: theme))
+                        }
+                        .padding(.vertical, -3)
+                        .tag(theme)
                     }
                 }
                 .labelsHidden()

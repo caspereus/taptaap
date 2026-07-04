@@ -62,7 +62,7 @@ struct VisualizerPositionPicker: View {
     }
 }
 
-private struct VisualizerPositionIcon: View {
+struct VisualizerPositionIcon: View {
     let position: VisualizerPosition
 
     var body: some View {
