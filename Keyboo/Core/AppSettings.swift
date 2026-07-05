@@ -12,6 +12,7 @@ final class AppSettings: ObservableObject {
         static let launchAtLogin = "keyboo.launchAtLogin"
         static let enableSound = "keyboo.enableSound"
         static let enableVisualizer = "keyboo.enableVisualizer"
+        static let visualizerRequiresExplicitOptIn = "keyboo.visualizerRequiresExplicitOptIn"
         static let visualizerPosition = "keyboo.visualizerPosition"
         static let legacyMenuBarPosition = "keyboo.menuBarPosition"
         static let visualizerTheme = "keyboo.visualizerTheme"
@@ -80,8 +81,14 @@ final class AppSettings: ObservableObject {
     }
 
     func openSettings(tab: SettingsTab? = nil) {
-        requestedSettingsTab = tab
-        NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+        // Defer until the menu bar menu closes; opening a window synchronously from
+        // MenuBarExtra menu actions is ignored by AppKit.
+        Task { @MainActor in
+            requestedSettingsTab = tab
+            try? await Task.sleep(for: .milliseconds(50))
+            SettingsWindowOpener.ensureHostWindowVisible()
+            SettingsWindowOpener.requestOpenSettings()
+        }
     }
 
     private init() {
@@ -105,7 +112,14 @@ final class AppSettings: ObservableObject {
         outputVolume = min(max(storedVolume, 0), 1)
         enableSpatialAudio = defaults.object(forKey: Keys.enableSpatialAudio) as? Bool ?? true
         enableSound = defaults.object(forKey: Keys.enableSound) as? Bool ?? true
-        enableVisualizer = defaults.object(forKey: Keys.enableVisualizer) as? Bool ?? false
+
+        // The old menu-bar Toggle could write `enableVisualizer = true` without user intent.
+        // Reset once so the overlay stays off until the user explicitly enables it.
+        if !defaults.bool(forKey: Keys.visualizerRequiresExplicitOptIn) {
+            defaults.set(false, forKey: Keys.enableVisualizer)
+            defaults.set(true, forKey: Keys.visualizerRequiresExplicitOptIn)
+        }
+        enableVisualizer = defaults.bool(forKey: Keys.enableVisualizer)
 
         if let storedPosition = defaults.string(forKey: Keys.visualizerPosition) {
             visualizerPosition = VisualizerPosition(rawValue: storedPosition) ?? .bottomCenter

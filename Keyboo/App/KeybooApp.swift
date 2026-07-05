@@ -10,6 +10,16 @@ struct KeybooApp: App {
     }
 
     var body: some Scene {
+        // Must come before Settings so `@Environment(\.openSettings)` resolves in the host view.
+        Window("Settings Host", id: "settings-host") {
+            SettingsHostWindowView()
+        }
+        .windowStyle(.hiddenTitleBar)
+        .windowResizability(.contentSize)
+        .defaultSize(width: 1, height: 1)
+        .defaultPosition(.init(x: -10_000, y: -10_000))
+        .defaultLaunchBehavior(.presented)
+
         MenuBarExtra {
             MenuBarView()
         } label: {
@@ -27,6 +37,9 @@ struct KeybooApp: App {
 
         Settings {
             SettingsView()
+                .onDisappear {
+                    SettingsWindowOpener.notifySettingsClosed()
+                }
         }
     }
 }

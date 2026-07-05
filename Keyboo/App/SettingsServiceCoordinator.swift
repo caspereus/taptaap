@@ -19,19 +19,26 @@ final class SettingsServiceCoordinator {
     }
 
     private func bindSettings() {
+        // `@Published` emits in `willSet`, so the stored value is still the OLD one
+        // while the sink runs. Defer to the next main-actor tick so the sync helpers
+        // read the committed value (otherwise the visualizer/sound toggles invert).
         settings.$isEnabled
             .dropFirst()
             .sink { [weak self] _ in
-                self?.syncKeyboardMonitor()
-                self?.syncVisualizer()
+                Task { @MainActor in
+                    self?.syncKeyboardMonitor()
+                    self?.syncVisualizer()
+                }
             }
             .store(in: &cancellables)
 
         settings.$enableSound
             .dropFirst()
             .sink { [weak self] _ in
-                self?.syncSound()
-                self?.syncKeyboardMonitor()
+                Task { @MainActor in
+                    self?.syncSound()
+                    self?.syncKeyboardMonitor()
+                }
             }
             .store(in: &cancellables)
 
@@ -61,21 +68,25 @@ final class SettingsServiceCoordinator {
         settings.$enableVisualizer
             .dropFirst()
             .sink { [weak self] _ in
-                self?.syncVisualizer()
-                self?.syncKeyboardMonitor()
+                Task { @MainActor in
+                    self?.syncVisualizer()
+                    self?.syncKeyboardMonitor()
+                }
             }
             .store(in: &cancellables)
 
         settings.$visualizerPosition
             .dropFirst()
-            .sink { position in
+            .sink { [weak self] position in
+                guard self?.settings.enableVisualizer == true else { return }
                 TypingVisualizer.shared.updatePosition(position)
             }
             .store(in: &cancellables)
 
         settings.$visualizerTheme
             .dropFirst()
-            .sink { theme in
+            .sink { [weak self] theme in
+                guard self?.settings.enableVisualizer == true else { return }
                 TypingVisualizer.shared.updateTheme(theme)
             }
             .store(in: &cancellables)

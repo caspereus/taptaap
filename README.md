@@ -69,6 +69,34 @@ Keyboo/
   Resources/Sounds/          Sound assets per profile
 ```
 
+## Releasing
+
+Cut a release with the one-command script:
+
+```bash
+# explicit version
+Scripts/release.sh 1.1.0
+
+# or bump the current version
+Scripts/release.sh --bump patch      # major | minor | patch
+```
+
+It bumps the version in the project, runs `Scripts/production-checklist.sh`, builds
+and packages a versioned `.dmg`, inserts a `CHANGELOG.md` section, then commits and
+creates an annotated `v<version>` git tag.
+
+For a signed & notarized build suitable for public distribution, export your
+Developer ID and notary credentials first:
+
+```bash
+export CODE_SIGN_IDENTITY="Developer ID Application: Your Name (TEAMID)"
+export NOTARY_PROFILE="meecanico"   # created via: xcrun notarytool store-credentials
+
+Scripts/release.sh 1.1.0 --release  # also pushes the tag and publishes a GitHub release (needs gh)
+```
+
+Run `Scripts/release.sh --help` for all flags (`--push`, `--no-git`, `--allow-dirty`, `-y`, …).
+
 ## Privacy
 
 - Reads **keyCode only** from keyDown events

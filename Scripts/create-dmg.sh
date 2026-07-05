@@ -28,13 +28,23 @@ if [[ ! -f "$BACKGROUND_IMAGE" ]]; then
   exit 1
 fi
 
+SIGN_IDENTITY="${CODE_SIGN_IDENTITY:--}"
+
+# Enable the hardened runtime whenever we sign with a real Developer ID.
+# It is required for Apple notarization and harmless for local ad-hoc builds.
+HARDENED_RUNTIME=NO
+if [[ "$SIGN_IDENTITY" != "-" ]]; then
+  HARDENED_RUNTIME=YES
+fi
+
 echo "Building ${SCHEME} (Release)..."
 xcodebuild \
   -scheme "$SCHEME" \
   -configuration Release \
   -derivedDataPath "$DERIVED_DATA" \
   build \
-  CODE_SIGN_IDENTITY="${CODE_SIGN_IDENTITY:--}"
+  CODE_SIGN_IDENTITY="$SIGN_IDENTITY" \
+  ENABLE_HARDENED_RUNTIME="$HARDENED_RUNTIME"
 
 APP_PATH="$BUILD_PRODUCTS/${APP_NAME}.app"
 if [[ ! -d "$APP_PATH" ]]; then

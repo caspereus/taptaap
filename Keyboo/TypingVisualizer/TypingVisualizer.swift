@@ -51,6 +51,7 @@ final class TypingVisualizer: ObservableObject {
 
     func updatePosition(_ position: VisualizerPosition) {
         self.position = position
+        guard isVisible else { return }
         syncCursorTracking()
         repositionPanel()
     }

@@ -25,7 +25,7 @@ struct MenuBarView: View {
             Button {
                 settings.openSettings(tab: .sound)
             } label: {
-                Label("Sound", systemImage: "speaker.wave.2")
+                Label("Sound…", systemImage: "speaker.wave.2")
             }
 
             Menu {
@@ -78,9 +78,12 @@ struct MenuBarView: View {
 
             Divider()
 
-            SettingsLink {
+            Button {
+                settings.openSettings()
+            } label: {
                 Label("Settings…", systemImage: "gearshape")
             }
+            .keyboardShortcut(",", modifiers: .command)
 
             Button {
                 NSApplication.shared.terminate(nil)
