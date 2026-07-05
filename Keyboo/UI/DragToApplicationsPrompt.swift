@@ -10,15 +10,15 @@ struct DragToApplicationsPrompt: View {
     var style: Style = .full
 
     private var iconSize: CGFloat {
-        style == .full ? 88 : 56
+        style == .full ? 48 : 36
     }
 
     private var containerMaxWidth: CGFloat {
-        style == .full ? 292 : 248
+        style == .full ? 196 : 168
     }
 
     private var iconRowSpacing: CGFloat {
-        style == .full ? 14 : 10
+        style == .full ? 6 : 4
     }
 
     private var appIcon: NSImage {
@@ -30,29 +30,21 @@ struct DragToApplicationsPrompt: View {
     }
 
     var body: some View {
-        VStack(spacing: style == .full ? 12 : 8) {
-            HStack(spacing: iconRowSpacing) {
-                installTarget(icon: appIcon, label: "Meecanico")
+        HStack(spacing: iconRowSpacing) {
+            installTarget(icon: appIcon, label: "Meecanico")
 
-                dragArrow
+            dragArrow
 
-                installTarget(icon: applicationsIcon, label: "Applications")
-            }
-
-            Text("Drag Meecanico to the Applications folder")
-                .font(style == .full ? .subheadline.weight(.medium) : .footnote.weight(.medium))
-                .multilineTextAlignment(.center)
-                .foregroundStyle(.primary)
-                .fixedSize(horizontal: false, vertical: true)
+            installTarget(icon: applicationsIcon, label: "Applications")
         }
-        .padding(.horizontal, style == .full ? 18 : 14)
-        .padding(.vertical, style == .full ? 16 : 12)
+        .padding(.horizontal, style == .full ? 10 : 8)
+        .padding(.vertical, style == .full ? 8 : 6)
         .frame(maxWidth: containerMaxWidth)
         .frame(maxWidth: .infinity)
     }
 
     private func installTarget(icon: NSImage, label: String) -> some View {
-        VStack(spacing: 8) {
+        VStack(spacing: 4) {
             Image(nsImage: icon)
                 .resizable()
                 .interpolation(.high)
@@ -60,7 +52,7 @@ struct DragToApplicationsPrompt: View {
 
             Text(label)
                 .font(style == .full ? .caption : .caption2)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(.black.opacity(0.65))
                 .lineLimit(1)
                 .minimumScaleFactor(0.85)
         }
@@ -69,8 +61,8 @@ struct DragToApplicationsPrompt: View {
 
     private var dragArrow: some View {
         Image(systemName: "arrow.right")
-            .font(style == .full ? .title.weight(.semibold) : .headline.weight(.semibold))
-            .foregroundStyle(.tertiary)
+            .font(style == .full ? .subheadline.weight(.semibold) : .caption.weight(.semibold))
+            .foregroundStyle(.black.opacity(0.35))
             .symbolEffect(.pulse, options: .repeating)
             .accessibilityHidden(true)
     }

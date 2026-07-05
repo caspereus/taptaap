@@ -287,8 +287,11 @@ struct SettingsView: View {
     @ViewBuilder
     private var visualizerTab: some View {
         SettingsSection(title: "Typing Visualizer") {
-            Toggle("Enabled", isOn: $settings.enableVisualizer)
-                .disabled(!permissions.hasInputMonitoringAccess)
+            SettingsStatusRow(
+                title: "Status",
+                status: settings.enableVisualizer ? "On" : "Off",
+                isPositive: settings.enableVisualizer
+            )
 
             if !permissions.hasInputMonitoringAccess {
                 Text("Input Monitoring permission is required to show the typing visualizer.")
@@ -296,7 +299,12 @@ struct SettingsView: View {
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             } else if !settings.enableVisualizer {
-                Text("Off — no keyboard overlay while typing. Turn on in General or here.")
+                Text("Off by default — turn on Typing Visualizer in the General tab when you want the overlay.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            } else {
+                Text("Turn off in the General tab or from the menu bar.")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)

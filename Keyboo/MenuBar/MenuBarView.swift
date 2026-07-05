@@ -29,10 +29,7 @@ struct MenuBarView: View {
             }
 
             Menu {
-                Toggle(isOn: $settings.enableVisualizer) {
-                    Label("Typing Visualizer", systemImage: "eye")
-                }
-                .disabled(!permissions.hasInputMonitoringAccess)
+                visualizerToggleButton
 
                 Divider()
 
@@ -95,6 +92,23 @@ struct MenuBarView: View {
         .onAppear {
             permissions.refreshAccessStatus()
         }
+    }
+
+    private var visualizerToggleButton: some View {
+        Button {
+            // Apply after the menu closes so SwiftUI menu writeback cannot race UserDefaults.
+            let nextValue = !settings.enableVisualizer
+            Task { @MainActor in
+                settings.enableVisualizer = nextValue
+            }
+        } label: {
+            Label {
+                Text(settings.enableVisualizer ? "Disable Typing Visualizer" : "Enable Typing Visualizer")
+            } icon: {
+                Image(systemName: settings.enableVisualizer ? "checkmark" : "eye")
+            }
+        }
+        .disabled(!permissions.hasInputMonitoringAccess)
     }
 
     @ViewBuilder

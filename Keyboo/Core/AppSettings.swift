@@ -86,6 +86,16 @@ final class AppSettings: ObservableObject {
 
     private init() {
         let defaults = UserDefaults.standard
+        defaults.register(defaults: [
+            Keys.isEnabled: true,
+            Keys.enableSound: true,
+            Keys.enableVisualizer: false,
+            Keys.launchAtLogin: false,
+            Keys.outputVolume: 1.0,
+            Keys.enableSpatialAudio: true,
+            Keys.hasCompletedPermissionOnboarding: false,
+        ])
+
         isEnabled = defaults.object(forKey: Keys.isEnabled) as? Bool ?? true
         selectedProfile = SoundProfileID(
             rawValue: defaults.string(forKey: Keys.selectedProfile) ?? SoundProfileID.default.rawValue

@@ -13,7 +13,6 @@ final class KeyboardEventMonitor {
 
     private var tapThread: Thread?
     private var runLoop: CFRunLoop?
-    private var eventTap: CFMachPort?
     private var isRunning = false
 
     private let stateLock = NSLock()
@@ -34,8 +33,24 @@ final class KeyboardEventMonitor {
     }
 
     func start() {
-        guard !isRunning else { return }
-        guard CGPreflightListenEventAccess() else { return }
+        stateLock.lock()
+        guard !isRunning else {
+            stateLock.unlock()
+            return
+        }
+        stateLock.unlock()
+
+        waitForTapThreadToFinish()
+
+        stateLock.lock()
+        guard !isRunning else {
+            stateLock.unlock()
+            return
+        }
+        guard CGPreflightListenEventAccess() else {
+            stateLock.unlock()
+            return
+        }
 
         isRunning = true
         let thread = Thread { [weak self] in
@@ -43,31 +58,56 @@ final class KeyboardEventMonitor {
         }
         thread.name = "Keyboo.EventTap"
         tapThread = thread
+        stateLock.unlock()
+
         thread.start()
     }
 
     func stop() {
-        guard isRunning else { return }
+        stateLock.lock()
+        guard isRunning else {
+            stateLock.unlock()
+            return
+        }
         isRunning = false
+        let loop = runLoop
+        let thread = tapThread
+        stateLock.unlock()
 
-        if let runLoop {
-            CFRunLoopPerformBlock(runLoop, CFRunLoopMode.commonModes.rawValue) { [weak self] in
-                if let eventTap = self?.eventTap {
-                    CGEvent.tapEnable(tap: eventTap, enable: false)
-                }
-                CFRunLoopStop(runLoop)
+        if let loop {
+            CFRunLoopPerformBlock(loop, CFRunLoopMode.commonModes.rawValue) {
+                CFRunLoopStop(loop)
             }
-            CFRunLoopWakeUp(runLoop)
+            CFRunLoopWakeUp(loop)
         }
 
-        tapThread = nil
-        runLoop = nil
-        eventTap = nil
+        waitForThreadToFinish(thread)
+
+        stateLock.lock()
+        if tapThread === thread {
+            tapThread = nil
+            runLoop = nil
+        }
+        stateLock.unlock()
     }
 
     func restartIfNeeded() {
         stop()
         start()
+    }
+
+    private func waitForTapThreadToFinish() {
+        stateLock.lock()
+        let thread = tapThread
+        stateLock.unlock()
+        waitForThreadToFinish(thread)
+    }
+
+    private func waitForThreadToFinish(_ thread: Thread?) {
+        guard let thread else { return }
+        while !thread.isFinished {
+            Thread.sleep(forTimeInterval: 0.001)
+        }
     }
 
     private func runEventTap(on thread: Thread) {
@@ -107,25 +147,70 @@ final class KeyboardEventMonitor {
             callback: callback,
             userInfo: Unmanaged.passUnretained(self).toOpaque()
         ) else {
+            stateLock.lock()
             isRunning = false
+            tapThread = nil
+            runLoop = nil
+            stateLock.unlock()
             return
         }
 
-        eventTap = tap
-        runLoop = CFRunLoopGetCurrent()
+        let currentRunLoop = CFRunLoopGetCurrent()
+        stateLock.lock()
+        runLoop = currentRunLoop
+        stateLock.unlock()
 
         let source = CFMachPortCreateRunLoopSource(kCFAllocatorDefault, tap, 0)
-        CFRunLoopAddSource(runLoop, source, .commonModes)
+        CFRunLoopAddSource(currentRunLoop, source, .commonModes)
         CGEvent.tapEnable(tap: tap, enable: true)
 
-        while isRunning {
+        while true {
+            stateLock.lock()
+            let running = isRunning
+            stateLock.unlock()
+            guard running else { break }
             CFRunLoopRunInMode(.defaultMode, 0.25, true)
         }
 
-        if let source {
-            CFRunLoopRemoveSource(runLoop, source, .commonModes)
-        }
         CGEvent.tapEnable(tap: tap, enable: false)
-        eventTap = nil
+        if let source {
+            CFRunLoopRemoveSource(currentRunLoop, source, .commonModes)
+        }
+
+        stateLock.lock()
+        if runLoop === currentRunLoop {
+            runLoop = nil
+        }
+        if tapThread === thread {
+            tapThread = nil
+        }
+        stateLock.unlock()
     }
 }
+
+#if DEBUG
+extension KeyboardEventMonitor {
+    var isEventTapRunningForTesting: Bool {
+        stateLock.lock()
+        defer { stateLock.unlock() }
+        return isRunning
+    }
+
+    /// Pretends the event tap is already running (sound on, visualizer off scenario).
+    func simulateRunningEventTapForTesting(on thread: Thread) {
+        stateLock.lock()
+        isRunning = true
+        tapThread = thread
+        stateLock.unlock()
+    }
+
+    func resetForTesting() {
+        stateLock.lock()
+        isRunning = false
+        tapThread = nil
+        runLoop = nil
+        monitoringActive = false
+        stateLock.unlock()
+    }
+}
+#endif
