@@ -32,14 +32,14 @@ struct DragToApplicationsPrompt: View {
     var body: some View {
         VStack(spacing: style == .full ? 12 : 8) {
             HStack(spacing: iconRowSpacing) {
-                installTarget(icon: appIcon, label: "Taptaap")
+                installTarget(icon: appIcon, label: "Meecanico")
 
                 dragArrow
 
                 installTarget(icon: applicationsIcon, label: "Applications")
             }
 
-            Text("Drag Taptaap to the Applications folder")
+            Text("Drag Meecanico to the Applications folder")
                 .font(style == .full ? .subheadline.weight(.medium) : .footnote.weight(.medium))
                 .multilineTextAlignment(.center)
                 .foregroundStyle(.primary)

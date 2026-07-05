@@ -88,7 +88,7 @@ struct SettingsView: View {
         }
 
         SettingsSection(title: "General") {
-            Toggle("Enable Taptaap", isOn: $settings.isEnabled)
+            Toggle("Enable Meecanico", isOn: $settings.isEnabled)
                 .disabled(!permissions.hasInputMonitoringAccess)
 
             if !permissions.hasInputMonitoringAccess {
@@ -102,7 +102,7 @@ struct SettingsView: View {
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             } else {
-                Text("Taptaap is paused. Turn this on to resume your selected features.")
+                Text("Meecanico is paused. Turn this on to resume your selected features.")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -118,7 +118,7 @@ struct SettingsView: View {
 
             if permissions.hasInputMonitoringAccess && settings.isEnabled {
                 if !settings.enableSound && !settings.enableVisualizer {
-                    Text("Both features are off — Taptaap is not listening for key presses.")
+                    Text("Both features are off — Meecanico is not listening for key presses.")
                         .font(.footnote)
                         .foregroundStyle(.orange)
                         .fixedSize(horizontal: false, vertical: true)
@@ -181,7 +181,7 @@ struct SettingsView: View {
             VStack(alignment: .leading, spacing: 2) {
                 QuickHotkeyRow(
                     icon: "power",
-                    title: "Toggle Taptaap",
+                    title: "Toggle Meecanico",
                     shortcut: "Control + Option + Command + E"
                 )
                 QuickHotkeyRow(
@@ -198,7 +198,7 @@ struct SettingsView: View {
         }
 
         SettingsSection(title: "Privacy") {
-            Text("Taptaap only reads virtual key codes to play sounds. It never captures, stores, or transmits typed text.")
+            Text("Meecanico only reads virtual key codes to play sounds. It never captures, stores, or transmits typed text.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
                 .lineSpacing(2)
@@ -555,13 +555,13 @@ private struct SettingsSetupBanner: View {
                     .background(.orange.opacity(0.15), in: Capsule())
             }
 
-            Text("Taptaap needs Input Monitoring to detect key presses and play switch sounds.")
+            Text("Meecanico needs Input Monitoring to detect key presses and play switch sounds.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
 
             if permissions.hasAccessibilityOnly {
-                Text("Accessibility is enabled, but Taptaap needs Input Monitoring — a separate permission.")
+                Text("Accessibility is enabled, but Meecanico needs Input Monitoring — a separate permission.")
                     .font(.caption)
                     .foregroundStyle(.orange)
                     .fixedSize(horizontal: false, vertical: true)
@@ -569,7 +569,7 @@ private struct SettingsSetupBanner: View {
 
             VStack(alignment: .leading, spacing: 6) {
                 setupStep(number: 1, text: "Click \"Open System Settings\" below")
-                setupStep(number: 2, text: "Enable Taptaap under Privacy & Security → Input Monitoring")
+                setupStep(number: 2, text: "Enable Meecanico under Privacy & Security → Input Monitoring")
                 setupStep(number: 3, text: "Return here — status updates automatically")
             }
             .padding(.top, 2)
@@ -631,7 +631,7 @@ private struct SettingsAppHeader: View {
                     .frame(width: 48, height: 48)
 
                 VStack(alignment: .leading, spacing: 3) {
-                    Text("Taptaap")
+                    Text("Meecanico")
                         .font(.title2.weight(.semibold))
                     Text(versionText)
                         .font(.footnote)

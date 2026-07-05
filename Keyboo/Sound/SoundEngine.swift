@@ -68,7 +68,7 @@ final class SoundEngine {
 
         #if DEBUG
         if samplePools.isEmpty {
-            print("[Taptaap] No sound files found for profile '\(profileID.rawValue)'. Add .wav files under Resources/Sounds/\(profileID.rawValue)/")
+            print("[Meecanico] No sound files found for profile '\(profileID.rawValue)'. Add .wav files under Resources/Sounds/\(profileID.rawValue)/")
         }
         #endif
     }
@@ -248,7 +248,7 @@ final class SoundEngine {
             return buffer
         } catch {
             #if DEBUG
-            print("[Taptaap] Failed to load sound file at \(url.lastPathComponent): \(error.localizedDescription)")
+            print("[Meecanico] Failed to load sound file at \(url.lastPathComponent): \(error.localizedDescription)")
             #endif
             return nil
         }
@@ -261,7 +261,7 @@ final class SoundEngine {
             try engine.start()
         } catch {
             #if DEBUG
-            print("[Taptaap] Failed to start audio engine: \(error.localizedDescription)")
+            print("[Meecanico] Failed to start audio engine: \(error.localizedDescription)")
             #endif
         }
     }

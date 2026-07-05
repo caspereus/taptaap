@@ -56,13 +56,13 @@ enum InstallLocation {
     }
 
     static let installHint =
-        "Keeping Taptaap in Applications makes Input Monitoring setup more predictable."
+        "Keeping Meecanico in Applications makes Input Monitoring setup more predictable."
 
     static func revealApplicationsFolder() {
         NSWorkspace.shared.selectFile(nil, inFileViewerRootedAtPath: "/Applications")
     }
 
-    /// Opens Finder with Taptaap selected and the Applications folder visible for drag-and-drop install.
+    /// Opens Finder with Meecanico selected and the Applications folder visible for drag-and-drop install.
     static func revealForManualInstall() {
         let appURL = Bundle.main.bundleURL
         NSWorkspace.shared.activateFileViewerSelecting([appURL])
@@ -113,11 +113,11 @@ enum InstallLocation {
         var errorDescription: String? {
             switch self {
             case .notNeeded:
-                return "Taptaap is already in Applications."
+                return "Meecanico is already in Applications."
             case .copyFailed(let message):
-                return "Could not copy Taptaap to Applications. \(message)"
+                return "Could not copy Meecanico to Applications. \(message)"
             case .launchFailed(let message):
-                return "Copied Taptaap to Applications, but could not open it. Open it manually from Applications. \(message)"
+                return "Copied Meecanico to Applications, but could not open it. Open it manually from Applications. \(message)"
             }
         }
     }

@@ -7,16 +7,16 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		CED40E012FC065830074DB45 /* Taptaap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Taptaap.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		CED40E012FC065830074DB45 /* Meecanico.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Meecanico.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		CED40E042FC065830074DB45 /* Exceptions for "Keyboo" folder in "Taptaap" target */ = {
+		CED40E042FC065830074DB45 /* Exceptions for "Keyboo" folder in "Meecanico" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
-			target = CED40E002FC065830074DB45 /* Taptaap */;
+			target = CED40E002FC065830074DB45 /* Meecanico */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -24,7 +24,7 @@
 		CED40E032FC065830074DB45 /* Keyboo */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				CED40E042FC065830074DB45 /* Exceptions for "Keyboo" folder in "Taptaap" target */,
+				CED40E042FC065830074DB45 /* Exceptions for "Keyboo" folder in "Meecanico" target */,
 			);
 			path = Keyboo;
 			sourceTree = "<group>";
@@ -53,7 +53,7 @@
 		CED40E022FC065830074DB45 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				CED40E012FC065830074DB45 /* Taptaap.app */,
+				CED40E012FC065830074DB45 /* Meecanico.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -61,9 +61,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		CED40E002FC065830074DB45 /* Taptaap */ = {
+		CED40E002FC065830074DB45 /* Meecanico */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = CED40E0C2FC065840074DB45 /* Build configuration list for PBXNativeTarget "Taptaap" */;
+			buildConfigurationList = CED40E0C2FC065840074DB45 /* Build configuration list for PBXNativeTarget "Meecanico" */;
 			buildPhases = (
 				CED40DFD2FC065830074DB45 /* Sources */,
 				CED40DFE2FC065830074DB45 /* Frameworks */,
@@ -76,11 +76,11 @@
 			fileSystemSynchronizedGroups = (
 				CED40E032FC065830074DB45 /* Keyboo */,
 			);
-			name = Taptaap;
+			name = Meecanico;
 			packageProductDependencies = (
 			);
-			productName = Taptaap;
-			productReference = CED40E012FC065830074DB45 /* Taptaap.app */;
+			productName = Meecanico;
+			productReference = CED40E012FC065830074DB45 /* Meecanico.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -112,7 +112,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				CED40E002FC065830074DB45 /* Taptaap */,
+				CED40E002FC065830074DB45 /* Meecanico */,
 			);
 		};
 /* End PBXProject section */
@@ -268,9 +268,9 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Keyboo/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Taptaap;
+				INFOPLIST_KEY_CFBundleDisplayName = Meecanico;
 				INFOPLIST_KEY_LSUIElement = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2026 Taptaap. All rights reserved.";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2026 Meecanico. All rights reserved.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -299,9 +299,9 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Keyboo/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Taptaap;
+				INFOPLIST_KEY_CFBundleDisplayName = Meecanico;
 				INFOPLIST_KEY_LSUIElement = YES;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2026 Taptaap. All rights reserved.";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2026 Meecanico. All rights reserved.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -330,7 +330,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		CED40E0C2FC065840074DB45 /* Build configuration list for PBXNativeTarget "Taptaap" */ = {
+		CED40E0C2FC065840074DB45 /* Build configuration list for PBXNativeTarget "Meecanico" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				CED40E0D2FC065840074DB45 /* Debug */,

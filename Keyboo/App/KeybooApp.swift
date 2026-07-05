@@ -17,7 +17,7 @@ struct KeybooApp: App {
         }
         .menuBarExtraStyle(.menu)
 
-        Window("Welcome to Taptaap", id: PermissionOnboardingWindow.id) {
+        Window("Welcome to Meecanico", id: PermissionOnboardingWindow.id) {
             PermissionOnboardingView()
         }
         .windowStyle(.hiddenTitleBar)

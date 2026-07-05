@@ -34,7 +34,7 @@ struct PermissionOnboardingView: View {
                 .foregroundStyle(.tint)
                 .symbolRenderingMode(.hierarchical)
 
-            Text("Welcome to Taptaap")
+            Text("Welcome to Meecanico")
                 .font(.title2.weight(.semibold))
 
             Text("Mechanical keyboard sounds for every key you press.")
@@ -59,7 +59,7 @@ struct PermissionOnboardingView: View {
                 Label("Your privacy", systemImage: "lock.shield")
                     .font(.headline)
 
-                Text("Taptaap only reads virtual key codes to play sounds. It never captures, stores, or transmits what you type.")
+                Text("Meecanico only reads virtual key codes to play sounds. It never captures, stores, or transmits what you type.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -79,7 +79,7 @@ struct PermissionOnboardingView: View {
                 statusBadge
             }
 
-            Text("Taptaap needs this permission to detect key presses system-wide and play switch sounds.")
+            Text("Meecanico needs this permission to detect key presses system-wide and play switch sounds.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
@@ -87,15 +87,15 @@ struct PermissionOnboardingView: View {
             if !permissions.hasInputMonitoringAccess {
                 VStack(alignment: .leading, spacing: 6) {
                     if permissions.hasAccessibilityOnly {
-                        Text("Accessibility is enabled, but Taptaap needs Input Monitoring — a separate permission.")
+                        Text("Accessibility is enabled, but Meecanico needs Input Monitoring — a separate permission.")
                             .font(.caption)
                             .foregroundStyle(.orange)
                             .fixedSize(horizontal: false, vertical: true)
                     }
 
                     onboardingStep(number: 1, text: "Click \"Open System Settings\" below")
-                    onboardingStep(number: 2, text: "Enable Taptaap under Privacy & Security → Input Monitoring")
-                    onboardingStep(number: 3, text: "Return here — Taptaap will start automatically")
+                    onboardingStep(number: 2, text: "Enable Meecanico under Privacy & Security → Input Monitoring")
+                    onboardingStep(number: 3, text: "Return here — Meecanico will start automatically")
                 }
                 .padding(.top, 4)
             }

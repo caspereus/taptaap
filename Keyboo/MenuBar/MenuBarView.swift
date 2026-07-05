@@ -11,7 +11,7 @@ struct MenuBarView: View {
                 Button {
                     settings.isEnabled = true
                 } label: {
-                    Label("Enable Taptaap", systemImage: "keyboard")
+                    Label("Enable Meecanico", systemImage: "keyboard")
                 }
                 .disabled(!permissions.hasInputMonitoringAccess)
             }
@@ -88,7 +88,7 @@ struct MenuBarView: View {
             Button {
                 NSApplication.shared.terminate(nil)
             } label: {
-                Label("Quit Taptaap", systemImage: "power")
+                Label("Quit Meecanico", systemImage: "power")
             }
             .keyboardShortcut("q", modifiers: .command)
         }

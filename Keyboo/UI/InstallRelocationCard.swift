@@ -40,12 +40,12 @@ struct InstallRelocationCard: View {
                 .frame(maxWidth: .infinity)
 
             if embedded {
-                Text("Taptaap is running from \"\(InstallLocation.displayLabel)\". Drag it to Applications before granting Input Monitoring.")
+                Text("Meecanico is running from \"\(InstallLocation.displayLabel)\". Drag it to Applications before granting Input Monitoring.")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             } else {
-                Text("Taptaap is running from \"\(InstallLocation.displayLabel)\". Install to Applications so Input Monitoring stays linked to the app.")
+                Text("Meecanico is running from \"\(InstallLocation.displayLabel)\". Install to Applications so Input Monitoring stays linked to the app.")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -53,8 +53,8 @@ struct InstallRelocationCard: View {
 
             if !embedded {
                 VStack(alignment: .leading, spacing: 6) {
-                    installStep(number: 1, text: "Click \"Open Finder\" and drag Taptaap to Applications")
-                    installStep(number: 2, text: "Open Taptaap from Applications")
+                    installStep(number: 1, text: "Click \"Open Finder\" and drag Meecanico to Applications")
+                    installStep(number: 2, text: "Open Meecanico from Applications")
                     installStep(number: 3, text: "Then enable Input Monitoring in System Settings")
                 }
             }

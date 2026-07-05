@@ -1,10 +1,10 @@
 # Changelog
 
-All notable changes to Taptaap are documented here.
+All notable changes to Meecanico are documented here.
 
 ## [1.0.0] - 2026-07-04
 
-First public release of **Taptaap** (formerly Keyboo).
+First public release of **Meecanico** (formerly Keyboo).
 
 ### Added
 
@@ -15,7 +15,7 @@ First public release of **Taptaap** (formerly Keyboo).
 - Tabbed Settings window (General, Sound, Visualizer) with Launch at Login
 - Floating WPM/KPM typing visualizer with themes and position controls
 - Input Monitoring onboarding and install-to-Applications guidance
-- Global hotkeys: toggle Taptaap and cycle sound profiles
+- Global hotkeys: toggle Meecanico and cycle sound profiles
 - Drag-to-Applications install flow for DMG distribution
 
 ### Distribution
